@@ -5,6 +5,7 @@ import {
   Calculator, ArrowLeftRight, Headphones, Fuel, Zap, ParkingCircle, MapPin,
   GraduationCap, BadgeCheck, AlertTriangle, Home as HomeIcon, Car, ShoppingBag,
   CircleUserRound, X, Phone, FileWarning, Receipt, Locate,
+  Flame, IndianRupee, Trophy, CloudRain, Star, Camera, Share2,
 } from "lucide-react";
 import swiftImg from "@/assets/swift.png";
 import vitaraImg from "@/assets/grand-vitara.png";
