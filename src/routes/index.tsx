@@ -589,14 +589,358 @@ function BottomNav() {
   );
 }
 
+/* ---------- Stories Rail ---------- */
+
+type Story = {
+  id: string;
+  label: string;
+  bg: string; // tailwind gradient or solid bg classes for fullscreen + bubble
+  ring?: "gradient" | "gray";
+  visual: React.ReactNode; // inner bubble visual
+  cta: string;
+  headline: string;
+  sub: string;
+  seen?: boolean;
+  isReview?: boolean;
+};
+
+const STORIES: Story[] = [
+  {
+    id: "offer",
+    label: "Service Offer",
+    bg: "bg-gradient-to-br from-[#ef4444] to-[#b91c1c]",
+    visual: (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#ef4444] to-[#b91c1c]">
+        <Flame size={28} className="text-white" />
+      </div>
+    ),
+    cta: "Book at ₹999",
+    headline: "Monsoon Service Camp",
+    sub: "Flat 20% off labour till Sun · Free check-up + wash",
+  },
+  {
+    id: "swift",
+    label: "New Swift",
+    bg: "bg-gradient-to-br from-[#1F6FEB] to-[#0D1B40]",
+    visual: (
+      <div className="w-full h-full flex items-end justify-center bg-gradient-to-br from-[#1F6FEB] to-[#0D1B40]">
+        <img src={swiftImg} alt="" className="w-[110%] max-w-none -mb-1 object-contain" />
+      </div>
+    ),
+    cta: "Explore Swift",
+    headline: "The all-new Swift",
+    sub: "From ₹6.49L · 25.75 km/l · Z+ safety",
+  },
+  {
+    id: "emi",
+    label: "EMI from ₹6.2k",
+    bg: "bg-gradient-to-br from-[#12A150] to-[#065f3a]",
+    visual: (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#12A150] to-[#065f3a]">
+        <IndianRupee size={28} className="text-white" strokeWidth={2.5} />
+      </div>
+    ),
+    cta: "Calculate my EMI",
+    headline: "EMI from ₹6,249/mo",
+    sub: "0% processing fee · 6 partner banks · 60s approval",
+  },
+  {
+    id: "insurance",
+    label: "Renew Insurance",
+    bg: "bg-gradient-to-br from-[#F59E0B] to-[#b45309]",
+    visual: (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#F59E0B] to-[#b45309]">
+        <ShieldCheck size={28} className="text-white" />
+      </div>
+    ),
+    cta: "Renew now",
+    headline: "Expires in 12 days",
+    sub: "Save up to ₹3,400 with NCB · Cashless at 4,200+ garages",
+  },
+  {
+    id: "accessories",
+    label: "New Accessories",
+    bg: "bg-gradient-to-br from-[#0f172a] to-[#1e293b]",
+    visual: (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0f172a] to-[#1e293b]">
+        <Camera size={28} className="text-white" />
+      </div>
+    ),
+    cta: "Shop accessories",
+    headline: "Dash cams just dropped",
+    sub: "1440p · GPS · From ₹4,999 fitted at home",
+    seen: true,
+  },
+  {
+    id: "benefits",
+    label: "Owner Benefits",
+    bg: "bg-gradient-to-br from-[#0D1B40] to-[#1e3a8a]",
+    visual: (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0D1B40] to-[#1e3a8a]">
+        <Trophy size={28} className="text-[#F59E0B]" />
+      </div>
+    ),
+    cta: "See my benefits",
+    headline: "You're a Gold member",
+    sub: "2,450 reward points · Free pickup-drop unlocked",
+  },
+  {
+    id: "tv",
+    label: "True Value Fair",
+    bg: "bg-gradient-to-br from-[#0d9488] to-[#134e4a]",
+    visual: (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0d9488] to-[#134e4a]">
+        <MapPin size={28} className="text-white" />
+      </div>
+    ),
+    cta: "Get directions",
+    headline: "Mela this weekend",
+    sub: "Karol Bagh · Sat–Sun · 200+ certified cars",
+    seen: true,
+  },
+  {
+    id: "monsoon",
+    label: "Monsoon Tips",
+    bg: "bg-gradient-to-br from-[#475569] to-[#1e293b]",
+    visual: (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#475569] to-[#1e293b]">
+        <CloudRain size={28} className="text-white" />
+      </div>
+    ),
+    cta: "Read the guide",
+    headline: "5 monsoon must-dos",
+    sub: "Wipers, tyre tread, underbody · 2 min read",
+  },
+  {
+    id: "ev",
+    label: "e-Vitara is here",
+    bg: "bg-gradient-to-br from-[#0a0a0a] to-[#1e1b4b]",
+    visual: (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0a0a0a] to-[#1e1b4b]">
+        <Zap size={28} className="text-[#06B6D4]" fill="#06B6D4" />
+      </div>
+    ),
+    cta: "Pre-book ₹25k",
+    headline: "e-Vitara has landed",
+    sub: "500 km range · 10–80% in 45 min · Bookings open",
+  },
+  {
+    id: "review",
+    label: "Rate Your Service",
+    bg: "bg-gradient-to-br from-[#7c3aed] to-[#4c1d95]",
+    visual: (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#7c3aed] to-[#4c1d95]">
+        <Star size={28} className="text-white" fill="white" />
+      </div>
+    ),
+    cta: "Rate now",
+    headline: "How was Tuesday's service?",
+    sub: "Krishna Maruti, Moti Nagar · 21 May",
+    isReview: true,
+  },
+];
+
+function StoryBubble({ story, onTap }: { story: Story; onTap: () => void }) {
+  return (
+    <button
+      onClick={onTap}
+      className="flex flex-col items-center gap-1.5 shrink-0 w-[76px] focus:outline-none"
+    >
+      <div className="relative">
+        <div
+          className={`w-[72px] h-[72px] rounded-full p-[2.5px] ${
+            story.seen
+              ? "bg-[#E5E7EB]"
+              : "bg-[conic-gradient(from_140deg,#1F6FEB,#06B6D4,#1F6FEB)]"
+          }`}
+        >
+          <div className="w-full h-full rounded-full bg-white p-[2px]">
+            <div
+              className={`w-full h-full rounded-full overflow-hidden ${
+                story.seen ? "opacity-70 saturate-50" : ""
+              }`}
+            >
+              {story.visual}
+            </div>
+          </div>
+        </div>
+        {!story.seen && (
+          <span className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-accent ring-2 ring-white" />
+        )}
+      </div>
+      <div className="text-[10px] leading-tight text-center font-medium text-[#374151] line-clamp-2 px-0.5">
+        {story.label}
+      </div>
+    </button>
+  );
+}
+
+function StoriesRail({ onOpen }: { onOpen: (i: number) => void }) {
+  return (
+    <div className="bg-white border-b border-[rgba(0,0,0,0.05)]">
+      <div className="flex gap-3 overflow-x-auto no-scrollbar px-4 py-3">
+        {STORIES.map((s, i) => (
+          <StoryBubble key={s.id} story={s} onTap={() => onOpen(i)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Stories Viewer ---------- */
+
+function ReviewOverlay({ story }: { story: Story }) {
+  const [rating, setRating] = useState(0);
+  return (
+    <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-3xl p-6 pb-8 shadow-elev">
+      <div className="w-10 h-1 rounded-full bg-[#E5E7EB] mx-auto mb-5" />
+      <div className="font-serif text-[22px] text-foreground leading-tight">
+        Rate your service
+      </div>
+      <div className="text-[13px] text-muted-foreground mt-1">{story.sub}</div>
+      <div className="flex gap-2 mt-5 justify-center">
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button key={n} onClick={() => setRating(n)} className="p-1">
+            <Star
+              size={36}
+              className={n <= rating ? "text-[#F59E0B]" : "text-[#E5E7EB]"}
+              fill={n <= rating ? "#F59E0B" : "none"}
+            />
+          </button>
+        ))}
+      </div>
+      <input
+        placeholder="Add a one-line comment (optional)"
+        className="w-full mt-5 px-4 py-3 rounded-xl bg-secondary text-[14px] placeholder:text-muted-foreground focus:outline-none"
+      />
+      <button className="w-full mt-3 py-3.5 rounded-xl bg-primary text-white font-semibold text-[14px]">
+        Submit rating
+      </button>
+      <button className="w-full mt-2 py-3 rounded-xl bg-white border border-[rgba(0,0,0,0.08)] text-foreground font-medium text-[13px] flex items-center justify-center gap-2">
+        <Share2 size={15} /> Share on Google
+      </button>
+    </div>
+  );
+}
+
+function StoriesViewer({
+  startIndex,
+  onClose,
+}: {
+  startIndex: number;
+  onClose: () => void;
+}) {
+  const [idx, setIdx] = useState(startIndex);
+  const [progress, setProgress] = useState(0);
+  const story = STORIES[idx];
+
+  useEffect(() => {
+    setProgress(0);
+    if (story.isReview) return;
+    const start = Date.now();
+    const t = setInterval(() => {
+      const p = Math.min(1, (Date.now() - start) / 5000);
+      setProgress(p);
+      if (p >= 1) {
+        clearInterval(t);
+        if (idx < STORIES.length - 1) setIdx(idx + 1);
+        else onClose();
+      }
+    }, 50);
+    return () => clearInterval(t);
+  }, [idx, story.isReview, onClose]);
+
+  const goNext = () => (idx < STORIES.length - 1 ? setIdx(idx + 1) : onClose());
+  const goPrev = () => idx > 0 && setIdx(idx - 1);
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
+      <div className="relative w-full max-w-[440px] h-[100dvh] overflow-hidden">
+        {/* Background */}
+        <div className={`absolute inset-0 ${story.bg}`}>
+          {story.id === "swift" && (
+            <img
+              src={swiftImg}
+              alt=""
+              className="absolute bottom-24 left-1/2 -translate-x-1/2 w-[120%] max-w-none object-contain"
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70" />
+        </div>
+
+        {/* Progress segments */}
+        <div className="absolute top-3 left-3 right-3 flex gap-1 z-10">
+          {STORIES.map((_, i) => (
+            <div key={i} className="flex-1 h-[3px] rounded-full bg-white/30 overflow-hidden">
+              <div
+                className="h-full bg-white transition-[width] duration-75 ease-linear"
+                style={{
+                  width: i < idx ? "100%" : i === idx ? `${progress * 100}%` : "0%",
+                }}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Header */}
+        <div className="absolute top-7 left-4 right-4 flex items-center justify-between z-10">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center">
+              <span className="font-serif text-white text-[13px]">S</span>
+            </div>
+            <div className="text-white text-[12.5px] font-semibold">{story.label}</div>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-9 h-9 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-white"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Tap zones */}
+        <button
+          onClick={goPrev}
+          className="absolute left-0 top-16 bottom-32 w-1/3 z-0"
+          aria-label="Previous"
+        />
+        <button
+          onClick={goNext}
+          className="absolute right-0 top-16 bottom-32 w-2/3 z-0"
+          aria-label="Next"
+        />
+
+        {/* Content / bottom CTA */}
+        {story.isReview ? (
+          <ReviewOverlay story={story} />
+        ) : (
+          <div className="absolute inset-x-0 bottom-0 p-6 pb-8 z-10 pointer-events-none">
+            <div className="font-serif text-white text-[26px] leading-tight">
+              {story.headline}
+            </div>
+            <div className="text-white/85 text-[13.5px] mt-1.5 max-w-[300px]">
+              {story.sub}
+            </div>
+            <button className="mt-5 pointer-events-auto w-full py-3.5 rounded-xl bg-white text-primary font-semibold text-[14.5px] flex items-center justify-center gap-1.5">
+              {story.cta} <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* ---------- Page ---------- */
 
 function Home() {
   const [alertOpen, setAlertOpen] = useState(true);
+  const [storyIdx, setStoryIdx] = useState<number | null>(null);
   return (
     <div className="min-h-screen bg-[color:var(--surface)]">
       <main className="max-w-[440px] mx-auto bg-[color:var(--surface)] pb-2">
         <TopNav />
+        <StoriesRail onOpen={(i) => setStoryIdx(i)} />
         {alertOpen && <ServiceAlert onDismiss={() => setAlertOpen(false)} />}
         <HeroCarousel />
         <QuickActions />
@@ -611,6 +955,9 @@ function Home() {
         <div className="h-8" />
         <BottomNav />
       </main>
+      {storyIdx !== null && (
+        <StoriesViewer startIndex={storyIdx} onClose={() => setStoryIdx(null)} />
+      )}
     </div>
   );
 }
