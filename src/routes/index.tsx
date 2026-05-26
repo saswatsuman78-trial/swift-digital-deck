@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Bell, User, ChevronRight, Wrench, Gift, ShieldCheck, Sparkles, BookOpen,
   Calculator, ArrowLeftRight, Headphones, Fuel, Zap, ParkingCircle, MapPin,
@@ -7,6 +7,10 @@ import {
   CircleUserRound, X, Phone, FileWarning, Receipt, Locate,
   Flame, IndianRupee, Trophy, CloudRain, Star, Camera, Share2,
   MessageCircle, Send, ExternalLink,
+  Paintbrush, Settings, ClipboardList, CarFront, FileCheck, CreditCard,
+  RefreshCw, Banknote, Package, Disc3, SunMedium, Gauge,
+  LifeBuoy, BookMarked, Navigation, ChevronLeft,
+  Newspaper, Radio, TrendingUp, Megaphone, Building2, Rocket, Globe, Heart,
 } from "lucide-react";
 import swiftImg from "@/assets/swift.png";
 import vitaraImg from "@/assets/grand-vitara.png";
@@ -25,14 +29,14 @@ export const Route = createFileRoute("/")({
 
 /* ---------- Reusable atoms ---------- */
 
-function SectionHeader({ label, title, action }: { label?: string; title: string; action?: string }) {
+function SectionHeader({ label, title, action, onAction }: { label?: string; title: string; action?: string; onAction?: () => void }) {
   return (
     <div className="px-5 mb-3">
       {label && <div className="section-label mb-1">{label}</div>}
       <div className="flex items-end justify-between">
         <h2 className="text-[18px] font-semibold text-foreground tracking-tight">{title}</h2>
         {action && (
-          <button className="text-[13px] font-medium text-accent flex items-center gap-0.5">
+          <button onClick={onAction} className="text-[13px] font-medium text-accent flex items-center gap-0.5">
             {action} <ChevronRight size={14} />
           </button>
         )}
@@ -230,43 +234,188 @@ function HeroCarousel() {
 
 type Action = { icon: React.ReactNode; label: string; bg: string; color: string; dot?: boolean };
 
-function QuickActions() {
-  const row1: Action[] = [
-    { icon: <Wrench size={20} />, label: "Book Service", bg: "#EEF4FF", color: "#1F6FEB", dot: true },
-    { icon: <Gift size={20} />, label: "Buy Add-Ons", bg: "#F3F0FF", color: "#7C3AED" },
-    { icon: <ShieldCheck size={20} />, label: "Insurance", bg: "#EDFAF4", color: "#12A150" },
-    { icon: <Sparkles size={20} />, label: "Accessories", bg: "#FEF3C7", color: "#D97706" },
-    { icon: <BookOpen size={20} />, label: "Manual", bg: "#F3F4F6", color: "#6B7280" },
+type CarCareCategory = {
+  title: string;
+  icon: React.ReactNode;
+  color: string;
+  bg: string;
+  items: Action[];
+};
+
+function CarCarePopup({ onClose }: { onClose: () => void }) {
+  const categories: CarCareCategory[] = [
+    {
+      title: "Service & Maintenance",
+      icon: <Wrench size={18} />,
+      color: "#1F6FEB",
+      bg: "#EEF4FF",
+      items: [
+        { icon: <Wrench size={20} />, label: "Book Service", bg: "#EEF4FF", color: "#1F6FEB", dot: true },
+        { icon: <ClipboardList size={20} />, label: "Service History", bg: "#EEF4FF", color: "#1F6FEB" },
+        { icon: <Settings size={20} />, label: "Periodic Maint.", bg: "#EEF4FF", color: "#1F6FEB" },
+        { icon: <Paintbrush size={20} />, label: "Body & Paint", bg: "#EEF4FF", color: "#1F6FEB" },
+      ],
+    },
+    {
+      title: "Insurance & Protection",
+      icon: <ShieldCheck size={18} />,
+      color: "#12A150",
+      bg: "#EDFAF4",
+      items: [
+        { icon: <ShieldCheck size={20} />, label: "Renew Policy", bg: "#EDFAF4", color: "#12A150" },
+        { icon: <FileCheck size={20} />, label: "Claim Status", bg: "#EDFAF4", color: "#12A150" },
+        { icon: <CarFront size={20} />, label: "RSA Cover", bg: "#EDFAF4", color: "#12A150" },
+        { icon: <FileWarning size={20} />, label: "Policy Details", bg: "#EDFAF4", color: "#12A150" },
+      ],
+    },
+    {
+      title: "Finance & Payments",
+      icon: <IndianRupee size={18} />,
+      color: "#7C3AED",
+      bg: "#F3F0FF",
+      items: [
+        { icon: <Calculator size={20} />, label: "EMI Calc", bg: "#F3F0FF", color: "#7C3AED" },
+        { icon: <CreditCard size={20} />, label: "Pay EMI", bg: "#F3F0FF", color: "#7C3AED" },
+        { icon: <Banknote size={20} />, label: "Loan Offers", bg: "#F3F0FF", color: "#7C3AED" },
+        { icon: <RefreshCw size={20} />, label: "Refinance", bg: "#F3F0FF", color: "#7C3AED" },
+      ],
+    },
+    {
+      title: "Accessories & Add-Ons",
+      icon: <Sparkles size={18} />,
+      color: "#D97706",
+      bg: "#FEF3C7",
+      items: [
+        { icon: <Sparkles size={20} />, label: "Accessories", bg: "#FEF3C7", color: "#D97706" },
+        { icon: <Gift size={20} />, label: "Buy Add-Ons", bg: "#FEF3C7", color: "#D97706" },
+        { icon: <Package size={20} />, label: "Genuine Parts", bg: "#FEF3C7", color: "#D97706" },
+        { icon: <Disc3 size={20} />, label: "Alloy Wheels", bg: "#FEF3C7", color: "#D97706" },
+      ],
+    },
+    {
+      title: "Tools & Support",
+      icon: <Headphones size={18} />,
+      color: "#0891B2",
+      bg: "#ECFEFF",
+      items: [
+        { icon: <Headphones size={20} />, label: "S-Assist", bg: "#ECFEFF", color: "#0891B2" },
+        { icon: <BookOpen size={20} />, label: "Manual", bg: "#ECFEFF", color: "#0891B2" },
+        { icon: <LifeBuoy size={20} />, label: "Roadside SOS", bg: "#ECFEFF", color: "#0891B2" },
+        { icon: <BookMarked size={20} />, label: "FAQs", bg: "#ECFEFF", color: "#0891B2" },
+      ],
+    },
+    {
+      title: "Drive & Locate",
+      icon: <Navigation size={18} />,
+      color: "#E11D48",
+      bg: "#FFF1F2",
+      items: [
+        { icon: <Fuel size={20} />, label: "FASTag", bg: "#FFF1F2", color: "#E11D48" },
+        { icon: <Receipt size={20} />, label: "Challan", bg: "#FFF1F2", color: "#E11D48" },
+        { icon: <ArrowLeftRight size={20} />, label: "True Value", bg: "#FFF1F2", color: "#E11D48" },
+        { icon: <Gauge size={20} />, label: "Mileage Track", bg: "#FFF1F2", color: "#E11D48" },
+      ],
+    },
   ];
-  const row2: Action[] = [
-    { icon: <Calculator size={20} />, label: "EMI Calc", bg: "#EEF4FF", color: "#1F6FEB" },
-    { icon: <ArrowLeftRight size={20} />, label: "True Value", bg: "#FFF1F2", color: "#E11D48" },
-    { icon: <Headphones size={20} />, label: "S-Assist", bg: "#ECFEFF", color: "#0891B2" },
-    { icon: <Fuel size={20} />, label: "Fastag", bg: "#FEF3C7", color: "#D97706" },
-    { icon: <Receipt size={20} />, label: "Challan", bg: "#F3F4F6", color: "#6B7280" },
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={onClose}>
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+      {/* Panel */}
+      <div
+        className="relative w-full max-w-[440px] max-h-[85dvh] bg-white rounded-t-[28px] overflow-hidden animate-slide-up"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Handle */}
+        <div className="flex justify-center pt-3 pb-1">
+          <div className="w-10 h-1 rounded-full bg-[#D1D5DB]" />
+        </div>
+
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 pb-4 pt-1">
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground font-semibold">Car Care</div>
+            <h2 className="text-[20px] font-serif font-semibold text-foreground tracking-tight">All Services</h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-9 h-9 rounded-full bg-[#F3F4F6] flex items-center justify-center text-foreground hover:bg-[#E5E7EB] transition-colors"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Scrollable categories */}
+        <div className="overflow-y-auto px-5 pb-8" style={{ maxHeight: "calc(85dvh - 90px)" }}>
+          <div className="space-y-6">
+            {categories.map((cat) => (
+              <div key={cat.title}>
+                {/* Category header */}
+                <div className="flex items-center gap-2 mb-3">
+                  <div
+                    className="w-7 h-7 rounded-lg flex items-center justify-center"
+                    style={{ background: cat.bg, color: cat.color }}
+                  >
+                    {cat.icon}
+                  </div>
+                  <span className="text-[14px] font-semibold text-foreground">{cat.title}</span>
+                </div>
+                {/* Items grid */}
+                <div className="grid grid-cols-4 gap-3">
+                  {cat.items.map((a) => (
+                    <button key={a.label} className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform">
+                      <div
+                        className="relative w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm"
+                        style={{ background: a.bg, color: a.color }}
+                      >
+                        {a.icon}
+                        {a.dot && <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#DC2626] border-2 border-white" />}
+                      </div>
+                      <span className="text-[10.5px] leading-tight text-foreground text-center font-medium">{a.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function QuickActions() {
+  const [showPopup, setShowPopup] = useState(false);
+  const topActions: Action[] = [
+    { icon: <Wrench size={22} />, label: "Book Service", bg: "#EEF4FF", color: "#1F6FEB", dot: true },
+    { icon: <ShieldCheck size={22} />, label: "Insurance", bg: "#EDFAF4", color: "#12A150" },
+    { icon: <Sparkles size={22} />, label: "Accessories", bg: "#FEF3C7", color: "#D97706" },
+    { icon: <Headphones size={22} />, label: "S-Assist", bg: "#ECFEFF", color: "#0891B2" },
   ];
   return (
-    <div className="mt-2">
-      <SectionHeader label="Car Care" title="Complete care for your car" />
-      <div className="px-5 space-y-4">
-        {[row1, row2].map((row, ri) => (
-          <div key={ri} className="grid grid-cols-5 gap-1.5">
-            {row.map((a) => (
-              <button key={a.label} className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform">
+    <>
+      <div className="mt-2">
+        <SectionHeader label="Car Care" title="Complete care for your car" action="View All" onAction={() => setShowPopup(true)} />
+        <div className="px-5">
+          <div className="grid grid-cols-4 gap-3">
+            {topActions.map((a) => (
+              <button key={a.label} className="flex flex-col items-center gap-2 active:scale-95 transition-transform">
                 <div
-                  className="relative w-12 h-12 rounded-2xl flex items-center justify-center"
+                  className="relative w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm"
                   style={{ background: a.bg, color: a.color }}
                 >
                   {a.icon}
                   {a.dot && <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#DC2626] border-2 border-white" />}
                 </div>
-                <span className="text-[10.5px] leading-tight text-foreground text-center font-medium">{a.label}</span>
+                <span className="text-[11px] leading-tight text-foreground text-center font-medium">{a.label}</span>
               </button>
             ))}
           </div>
-        ))}
+        </div>
       </div>
-    </div>
+      {showPopup && <CarCarePopup onClose={() => setShowPopup(false)} />}
+    </>
   );
 }
 
@@ -576,7 +725,7 @@ function BottomNav() {
     { icon: <CircleUserRound size={20} />, label: "Profile" },
   ];
   return (
-    <div className="sticky bottom-0 z-30 bg-white/95 backdrop-blur-md border-t border-[rgba(0,0,0,0.06)]">
+    <div className="bg-white/95 backdrop-blur-md border-t border-[rgba(0,0,0,0.06)]">
       <div className="grid grid-cols-5 px-2 pt-2 pb-3">
         {tabs.map((t) => (
           <button key={t.label} className="flex flex-col items-center gap-1 py-1.5">
@@ -584,6 +733,372 @@ function BottomNav() {
             <div className={`text-[10.5px] font-medium ${t.active ? "text-accent" : "text-muted-foreground"}`}>{t.label}</div>
             {t.active && <div className="w-1 h-1 rounded-full bg-accent -mt-0.5" />}
           </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- News Ticker ---------- */
+
+type NewsItem = {
+  id: string;
+  icon: React.ReactNode;
+  text: string;
+  tag: string;
+  tagColor: string;
+  tagBg: string;
+  gradient: string;
+  emoji: string;
+  detail: string;
+};
+
+const NEWS_ITEMS: NewsItem[] = [
+  {
+    id: "ev1",
+    icon: <Rocket size={14} className="shrink-0" />,
+    text: "e-Vitara pre-bookings open — 500 km range EV!",
+    tag: "New Launch",
+    tagColor: "#DC2626",
+    tagBg: "#FEF2F2",
+    gradient: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+    emoji: "⚡",
+    detail: "Maruti Suzuki's first pure EV, the e-Vitara, is now open for pre-bookings. Featuring a 500 km range, ultra-fast charging, and cutting-edge safety tech. Deliveries start Q1 2027.",
+  },
+  {
+    id: "showroom1",
+    icon: <Building2 size={14} className="shrink-0" />,
+    text: "20 new Nexa showrooms opening in Tier-2 cities",
+    tag: "Expansion",
+    tagColor: "#7C3AED",
+    tagBg: "#F3F0FF",
+    gradient: "linear-gradient(135deg, #2d1b69 0%, #5b2c9d 50%, #8b5cf6 100%)",
+    emoji: "🏢",
+    detail: "Maruti Suzuki expands its premium Nexa network with 20 new showrooms across tier-2 cities including Indore, Jaipur, Lucknow, and Coimbatore. Grand opening offers include free accessories worth ₹25,000.",
+  },
+  {
+    id: "swift1",
+    icon: <Car size={14} className="shrink-0" />,
+    text: "All-new Swift hybrid spotted testing — 35 km/l!",
+    tag: "Upcoming",
+    tagColor: "#1F6FEB",
+    tagBg: "#EEF4FF",
+    gradient: "linear-gradient(135deg, #0c4a6e 0%, #0369a1 50%, #0ea5e9 100%)",
+    emoji: "🚗",
+    detail: "The next-gen Swift with strong-hybrid technology has been spotted testing on Indian roads. Expected to deliver 35 km/l mileage, making it the most fuel-efficient car in its segment.",
+  },
+  {
+    id: "safety1",
+    icon: <ShieldCheck size={14} className="shrink-0" />,
+    text: "Grand Vitara scores 5-star Global NCAP rating ⭐",
+    tag: "Safety",
+    tagColor: "#12A150",
+    tagBg: "#EDFAF4",
+    gradient: "linear-gradient(135deg, #064e3b 0%, #047857 50%, #10b981 100%)",
+    emoji: "🛡️",
+    detail: "The Maruti Suzuki Grand Vitara has achieved a full 5-star safety rating from Global NCAP for both adult and child occupant protection. Features include 6 airbags, ESP, and ADAS.",
+  },
+  {
+    id: "offer1",
+    icon: <Gift size={14} className="shrink-0" />,
+    text: "Monsoon Bonanza — Up to ₹75,000 off on Arena cars",
+    tag: "Offer",
+    tagColor: "#D97706",
+    tagBg: "#FEF3C7",
+    gradient: "linear-gradient(135deg, #78350f 0%, #b45309 50%, #f59e0b 100%)",
+    emoji: "🎁",
+    detail: "Limited-time monsoon festival offers on all Arena models. Get up to ₹75,000 in combined benefits including exchange bonus, corporate discounts, and free accessories. Valid till July 31.",
+  },
+  {
+    id: "app1",
+    icon: <Globe size={14} className="shrink-0" />,
+    text: "Suzuki Connect 2.0 — Remote AC, live tracking & more",
+    tag: "Tech",
+    tagColor: "#0891B2",
+    tagBg: "#ECFEFF",
+    gradient: "linear-gradient(135deg, #134e4a 0%, #0f766e 50%, #14b8a6 100%)",
+    emoji: "📱",
+    detail: "The all-new Suzuki Connect 2.0 brings remote AC control, real-time vehicle tracking, driving behaviour analysis, and geo-fence alerts. Free 3-year subscription with every new car.",
+  },
+  {
+    id: "cng1",
+    icon: <Fuel size={14} className="shrink-0" />,
+    text: "S-CNG now available on Brezza & Fronx — ₹1.5/km!",
+    tag: "Green",
+    tagColor: "#12A150",
+    tagBg: "#EDFAF4",
+    gradient: "linear-gradient(135deg, #14532d 0%, #15803d 50%, #22c55e 100%)",
+    emoji: "⛽",
+    detail: "Maruti's factory-fitted S-CNG technology is now available on Brezza and Fronx. Dual-cylinder setup with no boot space compromise. Running cost as low as ₹1.5/km.",
+  },
+  {
+    id: "milestone1",
+    icon: <Trophy size={14} className="shrink-0" />,
+    text: "Maruti crosses 2.5 crore cumulative sales milestone 🎉",
+    tag: "Milestone",
+    tagColor: "#D97706",
+    tagBg: "#FEF3C7",
+    gradient: "linear-gradient(135deg, #451a03 0%, #92400e 50%, #d97706 100%)",
+    emoji: "🏆",
+    detail: "Maruti Suzuki India has achieved a historic milestone of 2.5 crore cumulative vehicle sales since inception. The company continues to lead with over 41% market share in passenger vehicles.",
+  },
+];
+
+function NewsTicker() {
+  const [viewerOpen, setViewerOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        onClick={() => setViewerOpen(true)}
+        className="w-full overflow-hidden bg-gradient-to-r from-[#0D1B40] via-[#1E3A8A] to-[#0D1B40] py-2 relative group cursor-pointer"
+      >
+        {/* Shimmer overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent animate-shimmer pointer-events-none" />
+
+        {/* Scrolling content — duplicated for seamless loop */}
+        <div className="flex animate-marquee whitespace-nowrap">
+          {[...NEWS_ITEMS, ...NEWS_ITEMS].map((item, i) => (
+            <span key={i} className="inline-flex items-center gap-1.5 mx-5 text-white/90">
+              <span className="text-[color:#60A5FA]">{item.icon}</span>
+              <span
+                className="text-[9px] uppercase tracking-wider font-bold px-1.5 py-[1px] rounded-full"
+                style={{ color: item.tagColor, background: item.tagBg + "33" }}
+              >
+                {item.tag}
+              </span>
+              <span className="text-[12px] font-medium">{item.text}</span>
+              <span className="text-white/20 mx-2">│</span>
+            </span>
+          ))}
+        </div>
+
+        {/* Left/right fade edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#0D1B40] to-transparent pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#0D1B40] to-transparent pointer-events-none" />
+
+        {/* Pulsing dot */}
+        <div className="absolute left-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+          <span className="text-[9px] uppercase tracking-widest font-bold text-red-400">Live</span>
+        </div>
+      </button>
+
+      {viewerOpen && (
+        <NewsCardViewer onClose={() => setViewerOpen(false)} />
+      )}
+    </>
+  );
+}
+
+/* ---------- News Card Viewer (Tinder-style) ---------- */
+
+function NewsCardViewer({ onClose }: { onClose: () => void }) {
+  const [cards, setCards] = useState(() => [...NEWS_ITEMS]);
+  const [dragState, setDragState] = useState({ x: 0, y: 0, dragging: false });
+  const startRef = useRef({ x: 0, y: 0, time: 0 });
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [exitAnim, setExitAnim] = useState<"left" | "right" | null>(null);
+
+  const threshold = 80;
+
+  const handleStart = useCallback((clientX: number, clientY: number) => {
+    startRef.current = { x: clientX, y: clientY, time: Date.now() };
+    setDragState({ x: 0, y: 0, dragging: true });
+  }, []);
+
+  const handleMove = useCallback((clientX: number, clientY: number) => {
+    if (!dragState.dragging) return;
+    const dx = clientX - startRef.current.x;
+    const dy = clientY - startRef.current.y;
+    setDragState((s) => ({ ...s, x: dx, y: dy * 0.3 }));
+  }, [dragState.dragging]);
+
+  const dismissCard = useCallback((dir: "left" | "right") => {
+    setExitAnim(dir);
+    setTimeout(() => {
+      setCards((prev) => {
+        if (dir === "right") return []; // skip all
+        return prev.slice(1); // next card
+      });
+      setExitAnim(null);
+      setDragState({ x: 0, y: 0, dragging: false });
+    }, 300);
+  }, []);
+
+  const handleEnd = useCallback(() => {
+    if (!dragState.dragging) return;
+    if (dragState.x < -threshold) {
+      dismissCard("left");
+    } else if (dragState.x > threshold) {
+      dismissCard("right");
+    } else {
+      setDragState({ x: 0, y: 0, dragging: false });
+    }
+  }, [dragState, dismissCard]);
+
+  // Touch handlers
+  const onTouchStart = (e: React.TouchEvent) => handleStart(e.touches[0].clientX, e.touches[0].clientY);
+  const onTouchMove = (e: React.TouchEvent) => handleMove(e.touches[0].clientX, e.touches[0].clientY);
+  const onTouchEnd = () => handleEnd();
+
+  // Mouse handlers
+  const onMouseDown = (e: React.MouseEvent) => { e.preventDefault(); handleStart(e.clientX, e.clientY); };
+  const onMouseMove = (e: React.MouseEvent) => handleMove(e.clientX, e.clientY);
+  const onMouseUp = () => handleEnd();
+  const onMouseLeave = () => { if (dragState.dragging) handleEnd(); };
+
+  const rotation = dragState.x * 0.08;
+  const opacity = Math.max(0, 1 - Math.abs(dragState.x) / 300);
+
+  // Determine stamp
+  const stampDirection = Math.abs(dragState.x) > 40
+    ? dragState.x < 0 ? "left" : "right"
+    : null;
+
+  if (cards.length === 0) {
+    return (
+      <div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-md flex items-center justify-center" onClick={onClose}>
+        <div className="text-center animate-fade-in" onClick={(e) => e.stopPropagation()}>
+          <div className="text-5xl mb-4">✅</div>
+          <div className="text-white font-serif text-[22px] font-semibold">All caught up!</div>
+          <div className="text-white/60 text-[14px] mt-2">You've seen all the latest updates.</div>
+          <button
+            onClick={onClose}
+            className="mt-6 px-6 py-2.5 rounded-full bg-white text-[#0D1B40] text-[14px] font-bold shadow-xl hover:shadow-2xl transition-all active:scale-95"
+          >
+            Back to Home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-md flex flex-col" onClick={onClose}>
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 pt-5 pb-3" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          <span className="text-white font-bold text-[15px]">News & Updates</span>
+          <span className="text-white/40 text-[12px]">{cards.length} remaining</span>
+        </div>
+        <button
+          onClick={onClose}
+          className="w-9 h-9 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-white hover:bg-white/20 transition-all"
+        >
+          <X size={18} />
+        </button>
+      </div>
+
+      {/* Swipe hints */}
+      <div className="flex justify-between px-8 mb-2" onClick={(e) => e.stopPropagation()}>
+        <span className="text-[11px] text-white/40 flex items-center gap-1">← Swipe left: <span className="text-blue-400 font-semibold">Next</span></span>
+        <span className="text-[11px] text-white/40 flex items-center gap-1">Swipe right: <span className="text-amber-400 font-semibold">Skip all</span> →</span>
+      </div>
+
+      {/* Card stack */}
+      <div className="flex-1 flex items-center justify-center px-6 pb-10" onClick={(e) => e.stopPropagation()}>
+        <div className="relative w-full max-w-[380px] h-[480px]">
+          {/* Background cards (stack effect) */}
+          {cards.slice(1, 3).map((card, i) => (
+            <div
+              key={card.id}
+              className="absolute inset-0 rounded-[24px] bg-white/5 border border-white/10 backdrop-blur-sm"
+              style={{
+                transform: `scale(${1 - (i + 1) * 0.04}) translateY(${(i + 1) * 12}px)`,
+                zIndex: 10 - i,
+                opacity: 1 - (i + 1) * 0.2,
+              }}
+            />
+          ))}
+
+          {/* Top card (draggable) */}
+          <div
+            ref={cardRef}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseLeave}
+            className={`absolute inset-0 rounded-[24px] overflow-hidden cursor-grab active:cursor-grabbing select-none z-20 ${
+              exitAnim ? "transition-all duration-300 ease-out" : dragState.dragging ? "" : "transition-transform duration-200 ease-out"
+            }`}
+            style={{
+              transform: exitAnim === "left"
+                ? "translateX(-150%) rotate(-20deg)"
+                : exitAnim === "right"
+                ? "translateX(150%) rotate(20deg)"
+                : `translateX(${dragState.x}px) translateY(${dragState.y}px) rotate(${rotation}deg)`,
+              opacity: exitAnim ? 0 : opacity,
+            }}
+          >
+            {/* Card background */}
+            <div className="absolute inset-0" style={{ background: cards[0].gradient }} />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+
+            {/* Stamp overlays */}
+            {stampDirection === "left" && (
+              <div className="absolute top-8 right-6 z-30 border-4 border-blue-400 rounded-xl px-4 py-2 rotate-12 opacity-80">
+                <span className="text-blue-400 text-[24px] font-black uppercase tracking-wider">Next</span>
+              </div>
+            )}
+            {stampDirection === "right" && (
+              <div className="absolute top-8 left-6 z-30 border-4 border-amber-400 rounded-xl px-4 py-2 -rotate-12 opacity-80">
+                <span className="text-amber-400 text-[24px] font-black uppercase tracking-wider">Skip</span>
+              </div>
+            )}
+
+            {/* Content */}
+            <div className="relative h-full flex flex-col p-6 text-white">
+              {/* Tag */}
+              <div className="flex items-center gap-2 mb-4">
+                <span
+                  className="text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded-full"
+                  style={{ color: cards[0].tagColor, background: cards[0].tagBg }}
+                >
+                  {cards[0].tag}
+                </span>
+              </div>
+
+              {/* Emoji hero */}
+              <div className="flex-1 flex items-center justify-center">
+                <div className="relative">
+                  <div className="absolute inset-0 -m-8 rounded-full bg-white/5 blur-xl" />
+                  <div className="text-[80px] relative z-10 drop-shadow-2xl">{cards[0].emoji}</div>
+                </div>
+              </div>
+
+              {/* Text */}
+              <div className="mt-auto">
+                <h3 className="font-serif text-[24px] leading-tight font-bold">{cards[0].text}</h3>
+                <p className="text-white/70 text-[13px] mt-3 leading-relaxed">{cards[0].detail}</p>
+
+                {/* Action button */}
+                <button className="mt-5 w-full py-3 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 text-white font-bold text-[13px] flex items-center justify-center gap-1.5 hover:bg-white/25 transition-all active:scale-95 pointer-events-none">
+                  Read More <ChevronRight size={14} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom indicators */}
+      <div className="flex justify-center gap-1.5 pb-6" onClick={(e) => e.stopPropagation()}>
+        {NEWS_ITEMS.map((item, i) => (
+          <div
+            key={item.id}
+            className={`h-1 rounded-full transition-all duration-300 ${
+              i < NEWS_ITEMS.length - cards.length
+                ? "w-4 bg-white/60"
+                : i === NEWS_ITEMS.length - cards.length
+                ? "w-6 bg-white"
+                : "w-2 bg-white/20"
+            }`}
+          />
         ))}
       </div>
     </div>
@@ -1029,7 +1544,7 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="fixed bottom-24 right-4 w-[360px] h-[500px] bg-white rounded-2xl shadow-2xl flex flex-col z-50 border border-[#E5E7EB] animate-scale-in">
+    <div className="absolute bottom-16 right-0 w-[340px] h-[460px] bg-white rounded-2xl shadow-2xl flex flex-col z-50 border border-[#E5E7EB] animate-scale-in">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#FFD700] via-[#C0C0C0] to-[#DAA520] p-4 rounded-t-2xl flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -1095,7 +1610,7 @@ function ChatbotBubble() {
   const [showChat, setShowChat] = useState(false);
 
   return (
-    <div className="fixed right-4 bottom-20 md:bottom-6 z-50">
+    <div className="absolute bottom-full right-4 mb-3 z-50">
       {/* Chat Interface */}
       {showChat && (
         <ChatInterface onClose={() => setShowChat(false)} />
@@ -1103,7 +1618,7 @@ function ChatbotBubble() {
 
       {/* Options Menu */}
       {showOptions && !showChat && (
-        <div className="absolute bottom-20 right-0 bg-white rounded-2xl shadow-2xl border border-[#E5E7EB] overflow-hidden animate-scale-in">
+        <div className="absolute bottom-16 right-0 bg-white rounded-2xl shadow-2xl border border-[#E5E7EB] overflow-hidden animate-scale-in">
           {/* WhatsApp Option */}
           <a
             href="https://wa.me/919876543210?text=Hello%20Maruti%20Suzuki%2C%20I%20need%20assistance"
@@ -1174,13 +1689,6 @@ function ChatbotBubble() {
           </div>
         )}
       </button>
-
-      {/* Floating Label */}
-      {!showOptions && !showChat && (
-        <div className="absolute bottom-24 right-2 bg-[#1a1a1a] text-white text-[12px] px-3 py-1.5 rounded-full whitespace-nowrap animate-bounce opacity-80 hidden md:block pointer-events-none">
-          💬 Chat with us
-        </div>
-      )}
     </div>
   );
 }
@@ -1194,6 +1702,7 @@ function Home() {
     <div className="min-h-screen bg-[color:var(--surface)]">
       <main className="max-w-[440px] mx-auto bg-[color:var(--surface)] pb-2">
         <TopNav />
+        <NewsTicker />
         <StoriesRail onOpen={(i) => setStoryIdx(i)} />
         {alertOpen && <ServiceAlert onDismiss={() => setAlertOpen(false)} />}
         <HeroCarousel />
@@ -1207,12 +1716,14 @@ function Home() {
         <Utilities />
         <TrueValue />
         <div className="h-8" />
-        <BottomNav />
+        <div className="relative sticky bottom-0 z-30">
+          <ChatbotBubble />
+          <BottomNav />
+        </div>
       </main>
       {storyIdx !== null && (
         <StoriesViewer startIndex={storyIdx} onClose={() => setStoryIdx(null)} />
       )}
-      <ChatbotBubble />
     </div>
   );
 }
