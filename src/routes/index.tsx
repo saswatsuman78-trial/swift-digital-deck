@@ -783,7 +783,6 @@ function StoriesRail({ onOpen }: { onOpen: (i: number) => void }) {
   return (
     <div className="bg-gradient-to-b from-white via-white to-[#f8f8f8] border-b border-[rgba(0,0,0,0.06)] shadow-sm">
       <div className="flex gap-3.5 overflow-x-auto no-scrollbar px-5 py-4">
-        <div className="text-[11px] font-bold text-[#666] uppercase tracking-[0.15em] whitespace-nowrap self-center">Maruti Digest</div>
         {STORIES.map((s, i) => (
           <StoryBubble key={s.id} story={s} onTap={() => onOpen(i)} />
         ))}
@@ -916,6 +915,47 @@ function StoriesViewer({
           >
             <X size={18} strokeWidth={2.5} />
           </button>
+        </div>
+
+        {/* Animated Banner Content - Middle Section */}
+        <div className="absolute top-24 left-0 right-0 bottom-32 flex items-center justify-center z-5 px-6">
+          <div className="w-full max-w-[360px]">
+            {/* Animated Icon Background */}
+            <div className="relative h-48 flex items-center justify-center mb-6">
+              {/* Pulsing circle background */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute w-32 h-32 rounded-full bg-white/10 backdrop-blur-sm animate-pulse" />
+                <div className="absolute w-40 h-40 rounded-full border border-white/20 animate-[spin_8s_linear_infinite]" />
+                <div className="absolute w-48 h-48 rounded-full border border-white/10 animate-[spin_12s_linear_reverse_infinite]" />
+              </div>
+              
+              {/* Center Icon - Animated */}
+              <div className="relative z-10 animate-bounce">
+                <div className="text-6xl drop-shadow-2xl">
+                  {story.id === "offer" && "🔥"}
+                  {story.id === "swift" && "🚗"}
+                  {story.id === "emi" && "💰"}
+                  {story.id === "insurance" && "🛡️"}
+                  {story.id === "accessories" && "📸"}
+                  {story.id === "benefits" && "👑"}
+                  {story.id === "tv" && "🏅"}
+                  {story.id === "monsoon" && "🌧️"}
+                  {story.id === "ev" && "⚡"}
+                  {story.id === "review" && "⭐"}
+                </div>
+              </div>
+            </div>
+
+            {/* Animated Info Card */}
+            <div className="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/30 shadow-2xl animate-fade-in">
+              <div className="text-center">
+                <p className="text-white/80 text-[12px] font-semibold uppercase tracking-[0.1em] mb-2">
+                  ✨ Tap to Explore
+                </p>
+                <div className="w-8 h-1 rounded-full bg-gradient-to-r from-transparent via-white/60 to-transparent mx-auto" />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Tap zones */}
