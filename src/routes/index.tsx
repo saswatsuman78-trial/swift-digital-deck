@@ -6,6 +6,7 @@ import {
   GraduationCap, BadgeCheck, AlertTriangle, Home as HomeIcon, Car, ShoppingBag,
   CircleUserRound, X, Phone, FileWarning, Receipt, Locate,
   Flame, IndianRupee, Trophy, CloudRain, Star, Camera, Share2,
+  MessageCircle, Send, ExternalLink,
 } from "lucide-react";
 import swiftImg from "@/assets/swift.png";
 import vitaraImg from "@/assets/grand-vitara.png";
@@ -991,6 +992,199 @@ function StoriesViewer({
   );
 }
 
+/* ---------- Chatbot Components ---------- */
+
+function ChatInterface({ onClose }: { onClose: () => void }) {
+  const [messages, setMessages] = useState<{ id: string; text: string; sender: "user" | "bot" }[]>([
+    { id: "1", text: "👋 Hello! Welcome to Maruti Suzuki. How can I help you today?", sender: "bot" },
+  ]);
+  const [input, setInput] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSend = () => {
+    if (!input.trim()) return;
+
+    const userMessage = { id: Date.now().toString(), text: input, sender: "user" as const };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+
+    setTimeout(() => {
+      const botResponses = [
+        "That's a great question! 🚗 Let me help you with that.",
+        "I'd be happy to assist! What specific information do you need?",
+        "Thanks for reaching out! Our team would love to help you further.",
+        "I understand. Let me provide you with the best solution for your needs.",
+      ];
+      const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
+      setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), text: randomResponse, sender: "bot" }]);
+    }, 800);
+  };
+
+  return (
+    <div className="fixed bottom-24 right-4 w-[360px] h-[500px] bg-white rounded-2xl shadow-2xl flex flex-col z-50 border border-[#E5E7EB] animate-scale-in">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-[#FFD700] via-[#C0C0C0] to-[#DAA520] p-4 rounded-t-2xl flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-white/30 flex items-center justify-center">
+            <MessageCircle size={18} className="text-white" />
+          </div>
+          <div>
+            <div className="text-white font-bold text-[13px]">Maruti Assistant</div>
+            <div className="text-white/80 text-[10px]">Always here to help</div>
+          </div>
+        </div>
+        <button
+          onClick={onClose}
+          className="text-white hover:bg-white/20 p-1 rounded-full transition-all"
+        >
+          <X size={18} />
+        </button>
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#f9f9f9]">
+        {messages.map((msg) => (
+          <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+            <div
+              className={`max-w-[260px] px-4 py-2 rounded-xl ${
+                msg.sender === "user"
+                  ? "bg-gradient-to-r from-[#FFD700] to-[#DAA520] text-[#1a1a1a] font-medium"
+                  : "bg-white text-[#1a1a1a] border border-[#E5E7EB]"
+              }`}
+            >
+              {msg.text}
+            </div>
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Input */}
+      <div className="border-t border-[#E5E7EB] p-3 bg-white rounded-b-2xl">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleSend()}
+            placeholder="Type your message..."
+            className="flex-1 px-3 py-2 rounded-full border border-[#E5E7EB] text-[13px] focus:outline-none focus:ring-2 focus:ring-[#FFD700]"
+          />
+          <button
+            onClick={handleSend}
+            className="bg-gradient-to-r from-[#FFD700] to-[#DAA520] text-[#1a1a1a] p-2.5 rounded-full hover:shadow-lg transition-all active:scale-95 font-semibold"
+          >
+            <Send size={16} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ChatbotBubble() {
+  const [showOptions, setShowOptions] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+
+  return (
+    <div className="fixed bottom-6 right-6 z-50">
+      {/* Chat Interface */}
+      {showChat && (
+        <ChatInterface onClose={() => setShowChat(false)} />
+      )}
+
+      {/* Options Menu */}
+      {showOptions && !showChat && (
+        <div className="absolute bottom-20 right-0 bg-white rounded-2xl shadow-2xl border border-[#E5E7EB] overflow-hidden animate-scale-in">
+          {/* WhatsApp Option */}
+          <a
+            href="https://wa.me/919876543210?text=Hello%20Maruti%20Suzuki%2C%20I%20need%20assistance"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-green-50 hover:to-green-100 transition-all border-b border-[#E5E7EB] group cursor-pointer"
+          >
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white">
+              <Phone size={18} strokeWidth={2} />
+            </div>
+            <div className="flex-1">
+              <div className="font-bold text-[13px] text-[#1a1a1a] group-hover:text-green-700">Chat on WhatsApp</div>
+              <div className="text-[11px] text-[#666]">Direct messaging</div>
+            </div>
+            <ExternalLink size={14} className="text-[#999] group-hover:text-green-600" />
+          </a>
+
+          {/* Chatbot Option */}
+          <button
+            onClick={() => {
+              setShowOptions(false);
+              setShowChat(true);
+            }}
+            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 transition-all group text-left"
+          >
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFD700] to-[#DAA520] flex items-center justify-center text-white">
+              <MessageCircle size={18} strokeWidth={2} />
+            </div>
+            <div className="flex-1">
+              <div className="font-bold text-[13px] text-[#1a1a1a] group-hover:text-amber-700">Chat with Bot</div>
+              <div className="text-[11px] text-[#666]">Instant responses</div>
+            </div>
+            <ChevronRight size={14} className="text-[#999] group-hover:text-amber-600" />
+          </button>
+        </div>
+      )}
+
+      {/* Main Bubble */}
+      <button
+        onClick={() => {
+          if (showChat) {
+            setShowChat(false);
+          } else {
+            setShowOptions(!showOptions);
+          }
+        }}
+        className={`relative w-16 h-16 rounded-full shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center justify-center font-bold text-white text-2xl group ${
+          showOptions || showChat
+            ? "bg-gradient-to-br from-[#E74C3C] to-[#C0392B]"
+            : "bg-gradient-to-br from-[#FFD700] via-[#C0C0C0] to-[#DAA520] hover:scale-110"
+        }`}
+      >
+        {showOptions || showChat ? (
+          <X size={24} strokeWidth={3} />
+        ) : (
+          <MessageCircle size={24} strokeWidth={1.5} />
+        )}
+
+        {/* Animated Pulse Ring */}
+        {!showOptions && !showChat && (
+          <div className="absolute inset-0 rounded-full bg-[#FFD700] opacity-20 animate-pulse" />
+        )}
+
+        {/* Notification Badge */}
+        {!showOptions && !showChat && (
+          <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 flex items-center justify-center text-white text-[10px] font-bold animate-bounce">
+            1
+          </div>
+        )}
+      </button>
+
+      {/* Floating Label */}
+      {!showOptions && !showChat && (
+        <div className="absolute bottom-20 right-2 bg-[#1a1a1a] text-white text-[12px] px-3 py-1.5 rounded-full whitespace-nowrap animate-bounce opacity-80 pointer-events-none">
+          💬 Chat with us
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ---------- Page ---------- */
 
 function Home() {
@@ -1018,6 +1212,7 @@ function Home() {
       {storyIdx !== null && (
         <StoriesViewer startIndex={storyIdx} onClose={() => setStoryIdx(null)} />
       )}
+      <ChatbotBubble />
     </div>
   );
 }
