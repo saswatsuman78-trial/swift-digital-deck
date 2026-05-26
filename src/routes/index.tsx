@@ -607,135 +607,135 @@ type Story = {
 const STORIES: Story[] = [
   {
     id: "offer",
-    label: "Service Offer",
-    bg: "bg-gradient-to-br from-[#ef4444] to-[#b91c1c]",
+    label: "Exclusive Service",
+    bg: "bg-gradient-to-br from-[#D4AF37] via-[#B8860B] to-[#8B6914]",
     visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#ef4444] to-[#b91c1c]">
-        <Flame size={28} className="text-white" />
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#D4AF37] via-[#B8860B] to-[#8B6914]">
+        <Flame size={32} className="text-white drop-shadow-lg" />
       </div>
     ),
-    cta: "Book at ₹999",
-    headline: "Monsoon Service Camp",
-    sub: "Flat 20% off labour till Sun · Free check-up + wash",
+    cta: "Book Now",
+    headline: "Nexa Premium Service",
+    sub: "20% off + complimentary detailing · Limited slots available",
   },
   {
     id: "swift",
-    label: "New Swift",
-    bg: "bg-gradient-to-br from-[#1F6FEB] to-[#0D1B40]",
+    label: "Swift Nexa",
+    bg: "bg-gradient-to-br from-[#C0C0C0] via-[#808080] to-[#404040]",
     visual: (
-      <div className="w-full h-full flex items-end justify-center bg-gradient-to-br from-[#1F6FEB] to-[#0D1B40]">
-        <img src={swiftImg} alt="" className="w-[110%] max-w-none -mb-1 object-contain" />
+      <div className="w-full h-full flex items-end justify-center bg-gradient-to-br from-[#C0C0C0] via-[#808080] to-[#404040]">
+        <img src={swiftImg} alt="" className="w-[110%] max-w-none -mb-1 object-contain drop-shadow-2xl" />
       </div>
     ),
-    cta: "Explore Swift",
-    headline: "The all-new Swift",
-    sub: "From ₹6.49L · 25.75 km/l · Z+ safety",
+    cta: "Discover More",
+    headline: "Swift Nexa Edition",
+    sub: "Engineered for sophistication · Advanced safety tech",
   },
   {
     id: "emi",
-    label: "EMI from ₹6.2k",
-    bg: "bg-gradient-to-br from-[#12A150] to-[#065f3a]",
+    label: "Smart Finance",
+    bg: "bg-gradient-to-br from-[#E8B4B8] via-[#C9A2A6] to-[#8B5A62]",
     visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#12A150] to-[#065f3a]">
-        <IndianRupee size={28} className="text-white" strokeWidth={2.5} />
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#E8B4B8] via-[#C9A2A6] to-[#8B5A62]">
+        <IndianRupee size={32} className="text-white drop-shadow-lg" strokeWidth={2.5} />
       </div>
     ),
-    cta: "Calculate my EMI",
-    headline: "EMI from ₹6,249/mo",
-    sub: "0% processing fee · 6 partner banks · 60s approval",
+    cta: "Calculate EMI",
+    headline: "Flexible EMI Options",
+    sub: "Starting from ₹5,999/mo · Instant approval",
   },
   {
     id: "insurance",
-    label: "Renew Insurance",
-    bg: "bg-gradient-to-br from-[#F59E0B] to-[#b45309]",
+    label: "Protection Plus",
+    bg: "bg-gradient-to-br from-[#F4A460] via-[#D2691E] to-[#8B4513]",
     visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#F59E0B] to-[#b45309]">
-        <ShieldCheck size={28} className="text-white" />
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#F4A460] via-[#D2691E] to-[#8B4513]">
+        <ShieldCheck size={32} className="text-white drop-shadow-lg" />
       </div>
     ),
-    cta: "Renew now",
-    headline: "Expires in 12 days",
-    sub: "Save up to ₹3,400 with NCB · Cashless at 4,200+ garages",
+    cta: "Renew Coverage",
+    headline: "Insurance Excellence",
+    sub: "Best rate guaranteed · 4,200+ workshops nationwide",
   },
   {
     id: "accessories",
-    label: "New Accessories",
-    bg: "bg-gradient-to-br from-[#0f172a] to-[#1e293b]",
+    label: "Premium Add-ons",
+    bg: "bg-gradient-to-br from-[#696969] via-[#505050] to-[#1a1a1a]",
     visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0f172a] to-[#1e293b]">
-        <Camera size={28} className="text-white" />
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#696969] via-[#505050] to-[#1a1a1a]">
+        <Camera size={32} className="text-white drop-shadow-lg" />
       </div>
     ),
-    cta: "Shop accessories",
-    headline: "Dash cams just dropped",
-    sub: "1440p · GPS · From ₹4,999 fitted at home",
+    cta: "Explore Range",
+    headline: "Curated Accessories",
+    sub: "Premium quality · Professional installation available",
     seen: true,
   },
   {
     id: "benefits",
-    label: "Owner Benefits",
-    bg: "bg-gradient-to-br from-[#0D1B40] to-[#1e3a8a]",
+    label: "Elite Rewards",
+    bg: "bg-gradient-to-br from-[#FFD700] via-[#DAA520] to-[#B8860B]",
     visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0D1B40] to-[#1e3a8a]">
-        <Trophy size={28} className="text-[#F59E0B]" />
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#FFD700] via-[#DAA520] to-[#B8860B]">
+        <Trophy size={32} className="text-white drop-shadow-lg" />
       </div>
     ),
-    cta: "See my benefits",
-    headline: "You're a Gold member",
-    sub: "2,450 reward points · Free pickup-drop unlocked",
+    cta: "View Benefits",
+    headline: "Platinum Member Status",
+    sub: "5,000 reward points · Exclusive access & privileges",
   },
   {
     id: "tv",
-    label: "True Value Fair",
-    bg: "bg-gradient-to-br from-[#0d9488] to-[#134e4a]",
+    label: "True Value Experience",
+    bg: "bg-gradient-to-br from-[#20B2AA] via-[#008B8B] to-[#004D4D]",
     visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0d9488] to-[#134e4a]">
-        <MapPin size={28} className="text-white" />
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#20B2AA] via-[#008B8B] to-[#004D4D]">
+        <MapPin size={32} className="text-white drop-shadow-lg" />
       </div>
     ),
-    cta: "Get directions",
-    headline: "Mela this weekend",
-    sub: "Karol Bagh · Sat–Sun · 200+ certified cars",
+    cta: "Get Directions",
+    headline: "True Value Festival",
+    sub: "Curated pre-owned collection · Premium condition guarantee",
     seen: true,
   },
   {
     id: "monsoon",
-    label: "Monsoon Tips",
-    bg: "bg-gradient-to-br from-[#475569] to-[#1e293b]",
+    label: "Care Guide",
+    bg: "bg-gradient-to-br from-[#A9A9A9] via-[#708090] to-[#2F4F4F]",
     visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#475569] to-[#1e293b]">
-        <CloudRain size={28} className="text-white" />
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#A9A9A9] via-[#708090] to-[#2F4F4F]">
+        <CloudRain size={32} className="text-white drop-shadow-lg" />
       </div>
     ),
-    cta: "Read the guide",
-    headline: "5 monsoon must-dos",
-    sub: "Wipers, tyre tread, underbody · 2 min read",
+    cta: "Read Guide",
+    headline: "Monsoon Maintenance",
+    sub: "Expert tips for peak performance · Quick read",
   },
   {
     id: "ev",
-    label: "e-Vitara is here",
-    bg: "bg-gradient-to-br from-[#0a0a0a] to-[#1e1b4b]",
+    label: "Future Ready",
+    bg: "bg-gradient-to-br from-[#1a1a1a] via-[#2d3142] to-[#0a0a0a]",
     visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0a0a0a] to-[#1e1b4b]">
-        <Zap size={28} className="text-[#06B6D4]" fill="#06B6D4" />
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1a1a1a] via-[#2d3142] to-[#0a0a0a]">
+        <Zap size={32} className="text-[#E0E0E0] drop-shadow-lg" fill="#E0E0E0" />
       </div>
     ),
-    cta: "Pre-book ₹25k",
-    headline: "e-Vitara has landed",
-    sub: "500 km range · 10–80% in 45 min · Bookings open",
+    cta: "Pre-Reserve",
+    headline: "e-Vitara Revolution",
+    sub: "500km range · Advanced EV technology · Ultra-fast charging",
   },
   {
     id: "review",
-    label: "Rate Your Service",
-    bg: "bg-gradient-to-br from-[#7c3aed] to-[#4c1d95]",
+    label: "Your Feedback",
+    bg: "bg-gradient-to-br from-[#B19CD9] via-[#9370DB] to-[#4B0082]",
     visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#7c3aed] to-[#4c1d95]">
-        <Star size={28} className="text-white" fill="white" />
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#B19CD9] via-[#9370DB] to-[#4B0082]">
+        <Star size={32} className="text-white drop-shadow-lg" fill="white" />
       </div>
     ),
-    cta: "Rate now",
-    headline: "How was Tuesday's service?",
-    sub: "Krishna Maruti, Moti Nagar · 21 May",
+    cta: "Rate Service",
+    headline: "Share Your Experience",
+    sub: "Your feedback drives our excellence",
     isReview: true,
   },
 ];
@@ -744,20 +744,22 @@ function StoryBubble({ story, onTap }: { story: Story; onTap: () => void }) {
   return (
     <button
       onClick={onTap}
-      className="flex flex-col items-center gap-1.5 shrink-0 w-[76px] focus:outline-none"
+      className="flex flex-col items-center gap-2 shrink-0 w-[80px] focus:outline-none group"
     >
       <div className="relative">
         <div
-          className={`w-[72px] h-[72px] rounded-full p-[2.5px] ${
+          className={`w-[76px] h-[76px] rounded-full p-[3px] transition-all duration-300 ${
             story.seen
-              ? "bg-[#E5E7EB]"
-              : "bg-[conic-gradient(from_140deg,#1F6FEB,#06B6D4,#1F6FEB)]"
+              ? "bg-gradient-to-br from-[#D3D3D3] to-[#A9A9A9]"
+              : "bg-gradient-to-br from-[#FFD700] via-[#C0C0C0] to-[#DAA520] shadow-lg"
           }`}
         >
-          <div className="w-full h-full rounded-full bg-white p-[2px]">
+          <div className={`w-full h-full rounded-full bg-white p-[2.5px] transition-all ${
+            story.seen ? "shadow-sm" : "shadow-md"
+          }`}>
             <div
-              className={`w-full h-full rounded-full overflow-hidden ${
-                story.seen ? "opacity-70 saturate-50" : ""
+              className={`w-full h-full rounded-full overflow-hidden transition-all duration-300 ${
+                story.seen ? "opacity-60 saturate-40 blur-[0.5px]" : "opacity-100 saturate-100"
               }`}
             >
               {story.visual}
@@ -765,10 +767,12 @@ function StoryBubble({ story, onTap }: { story: Story; onTap: () => void }) {
           </div>
         </div>
         {!story.seen && (
-          <span className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-accent ring-2 ring-white" />
+          <span className="absolute top-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-[#FFD700] ring-2 ring-white shadow-md animate-pulse" />
         )}
       </div>
-      <div className="text-[10px] leading-tight text-center font-medium text-[#374151] line-clamp-2 px-0.5">
+      <div className={`text-[10px] leading-tight text-center font-semibold transition-all duration-300 line-clamp-2 px-0.5 ${
+        story.seen ? "text-[#999999]" : "text-[#1a1a1a]"
+      }`}>
         {story.label}
       </div>
     </button>
@@ -777,8 +781,9 @@ function StoryBubble({ story, onTap }: { story: Story; onTap: () => void }) {
 
 function StoriesRail({ onOpen }: { onOpen: (i: number) => void }) {
   return (
-    <div className="bg-white border-b border-[rgba(0,0,0,0.05)]">
-      <div className="flex gap-3 overflow-x-auto no-scrollbar px-4 py-3">
+    <div className="bg-gradient-to-b from-white via-white to-[#f8f8f8] border-b border-[rgba(0,0,0,0.06)] shadow-sm">
+      <div className="flex gap-3.5 overflow-x-auto no-scrollbar px-5 py-4">
+        <div className="text-[11px] font-bold text-[#666] uppercase tracking-[0.15em] whitespace-nowrap self-center">Maruti Digest</div>
         {STORIES.map((s, i) => (
           <StoryBubble key={s.id} story={s} onTap={() => onOpen(i)} />
         ))}
@@ -792,32 +797,33 @@ function StoriesRail({ onOpen }: { onOpen: (i: number) => void }) {
 function ReviewOverlay({ story }: { story: Story }) {
   const [rating, setRating] = useState(0);
   return (
-    <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-3xl p-6 pb-8 shadow-elev">
-      <div className="w-10 h-1 rounded-full bg-[#E5E7EB] mx-auto mb-5" />
-      <div className="font-serif text-[22px] text-foreground leading-tight">
-        Rate your service
+    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-white via-white to-[#f9f9f9] rounded-t-3xl p-6 pb-8 shadow-2xl">
+      <div className="w-12 h-1 rounded-full bg-gradient-to-r from-[#FFD700] to-[#C0C0C0] mx-auto mb-6 shadow-md" />
+      <div className="font-serif text-[24px] text-[#1a1a1a] leading-tight font-bold">
+        Rate Your Experience
       </div>
-      <div className="text-[13px] text-muted-foreground mt-1">{story.sub}</div>
-      <div className="flex gap-2 mt-5 justify-center">
+      <div className="text-[13px] text-[#666] mt-2 font-medium">{story.sub}</div>
+      <div className="flex gap-3 mt-6 justify-center">
         {[1, 2, 3, 4, 5].map((n) => (
-          <button key={n} onClick={() => setRating(n)} className="p-1">
+          <button key={n} onClick={() => setRating(n)} className="p-1 transition-transform hover:scale-110 active:scale-95">
             <Star
-              size={36}
-              className={n <= rating ? "text-[#F59E0B]" : "text-[#E5E7EB]"}
-              fill={n <= rating ? "#F59E0B" : "none"}
+              size={40}
+              className={n <= rating ? "text-[#FFD700]" : "text-[#E5E7EB]"}
+              fill={n <= rating ? "#FFD700" : "none"}
+              strokeWidth={1.5}
             />
           </button>
         ))}
       </div>
       <input
-        placeholder="Add a one-line comment (optional)"
-        className="w-full mt-5 px-4 py-3 rounded-xl bg-secondary text-[14px] placeholder:text-muted-foreground focus:outline-none"
+        placeholder="Add a comment (optional)"
+        className="w-full mt-6 px-4 py-3 rounded-xl bg-[#f0f0f0] text-[14px] placeholder:text-[#999] text-[#1a1a1a] font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:ring-offset-2 transition-all"
       />
-      <button className="w-full mt-3 py-3.5 rounded-xl bg-primary text-white font-semibold text-[14px]">
-        Submit rating
+      <button className="w-full mt-4 py-3.5 rounded-xl bg-gradient-to-r from-[#FFD700] via-[#C0C0C0] to-[#DAA520] text-[#1a1a1a] font-bold text-[14px] shadow-lg hover:shadow-xl transition-all active:scale-95">
+        Submit Rating
       </button>
-      <button className="w-full mt-2 py-3 rounded-xl bg-white border border-[rgba(0,0,0,0.08)] text-foreground font-medium text-[13px] flex items-center justify-center gap-2">
-        <Share2 size={15} /> Share on Google
+      <button className="w-full mt-3 py-3 rounded-xl bg-white border-2 border-[#E5E7EB] text-[#1a1a1a] font-bold text-[13px] flex items-center justify-center gap-2 transition-all hover:border-[#FFD700]">
+        <Share2 size={16} strokeWidth={2} /> Share on Google
       </button>
     </div>
   );
@@ -843,15 +849,29 @@ function StoriesViewer({
       setProgress(p);
       if (p >= 1) {
         clearInterval(t);
-        if (idx < STORIES.length - 1) setIdx(idx + 1);
-        else onClose();
+        if (idx < STORIES.length - 1) {
+          setIdx(idx + 1);
+          STORIES[idx].seen = true;
+        } else {
+          STORIES[idx].seen = true;
+          onClose();
+        }
       }
     }, 50);
     return () => clearInterval(t);
   }, [idx, story.isReview, onClose]);
 
-  const goNext = () => (idx < STORIES.length - 1 ? setIdx(idx + 1) : onClose());
-  const goPrev = () => idx > 0 && setIdx(idx - 1);
+  const goNext = () => {
+    STORIES[idx].seen = true;
+    idx < STORIES.length - 1 ? setIdx(idx + 1) : onClose();
+  };
+  
+  const goPrev = () => {
+    if (idx > 0) {
+      STORIES[idx].seen = true;
+      setIdx(idx - 1);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
@@ -862,18 +882,18 @@ function StoriesViewer({
             <img
               src={swiftImg}
               alt=""
-              className="absolute bottom-24 left-1/2 -translate-x-1/2 w-[120%] max-w-none object-contain"
+              className="absolute bottom-24 left-1/2 -translate-x-1/2 w-[120%] max-w-none object-contain drop-shadow-2xl"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/80" />
         </div>
 
         {/* Progress segments */}
-        <div className="absolute top-3 left-3 right-3 flex gap-1 z-10">
+        <div className="absolute top-4 left-3 right-3 flex gap-1 z-10">
           {STORIES.map((_, i) => (
-            <div key={i} className="flex-1 h-[3px] rounded-full bg-white/30 overflow-hidden">
+            <div key={i} className="flex-1 h-[3px] rounded-full bg-white/40 backdrop-blur-sm overflow-hidden shadow-sm">
               <div
-                className="h-full bg-white transition-[width] duration-75 ease-linear"
+                className="h-full bg-white transition-[width] duration-75 ease-linear shadow-md"
                 style={{
                   width: i < idx ? "100%" : i === idx ? `${progress * 100}%` : "0%",
                 }}
@@ -883,18 +903,18 @@ function StoriesViewer({
         </div>
 
         {/* Header */}
-        <div className="absolute top-7 left-4 right-4 flex items-center justify-between z-10">
+        <div className="absolute top-8 left-4 right-4 flex items-center justify-between z-10">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center">
-              <span className="font-serif text-white text-[13px]">S</span>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FFD700] to-[#DAA520] shadow-lg flex items-center justify-center backdrop-blur-md border border-white/30">
+              <span className="font-serif text-white text-[13px] font-bold">M</span>
             </div>
-            <div className="text-white text-[12.5px] font-semibold">{story.label}</div>
+            <div className="text-white text-[12.5px] font-bold uppercase tracking-[0.05em]">{story.label}</div>
           </div>
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-white"
+            className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all border border-white/30 shadow-lg"
           >
-            <X size={18} />
+            <X size={18} strokeWidth={2.5} />
           </button>
         </div>
 
@@ -914,15 +934,15 @@ function StoriesViewer({
         {story.isReview ? (
           <ReviewOverlay story={story} />
         ) : (
-          <div className="absolute inset-x-0 bottom-0 p-6 pb-8 z-10 pointer-events-none">
-            <div className="font-serif text-white text-[26px] leading-tight">
+          <div className="absolute inset-x-0 bottom-0 p-6 pb-8 z-10 pointer-events-none bg-gradient-to-t from-black/90 via-black/50 to-transparent">
+            <div className="font-serif text-white text-[28px] leading-tight font-bold tracking-tight">
               {story.headline}
             </div>
-            <div className="text-white/85 text-[13.5px] mt-1.5 max-w-[300px]">
+            <div className="text-white/90 text-[14px] mt-2 max-w-[320px] font-medium leading-relaxed">
               {story.sub}
             </div>
-            <button className="mt-5 pointer-events-auto w-full py-3.5 rounded-xl bg-white text-primary font-semibold text-[14.5px] flex items-center justify-center gap-1.5">
-              {story.cta} <ChevronRight size={16} />
+            <button className="mt-6 pointer-events-auto w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FFD700] via-[#C0C0C0] to-[#DAA520] text-[#1a1a1a] font-bold text-[14.5px] flex items-center justify-center gap-1.5 shadow-2xl hover:shadow-lg transition-all active:scale-95">
+              {story.cta} <ChevronRight size={16} strokeWidth={3} />
             </button>
           </div>
         )}
