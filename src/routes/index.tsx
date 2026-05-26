@@ -1095,7 +1095,7 @@ function ChatbotBubble() {
   const [showChat, setShowChat] = useState(false);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed right-4 bottom-20 md:bottom-6 z-50">
       {/* Chat Interface */}
       {showChat && (
         <ChatInterface onClose={() => setShowChat(false)} />
@@ -1150,10 +1150,10 @@ function ChatbotBubble() {
             setShowOptions(!showOptions);
           }
         }}
-        className={`relative w-16 h-16 rounded-full shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center justify-center font-bold text-white text-2xl group ${
+        className={`relative w-12 h-12 rounded-full shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center justify-center font-bold text-white text-lg group ${
           showOptions || showChat
-            ? "bg-gradient-to-br from-[#E74C3C] to-[#C0392B]"
-            : "bg-gradient-to-br from-[#FFD700] via-[#C0C0C0] to-[#DAA520] hover:scale-110"
+            ? "bg-gradient-to-br from-[#1E3A8A] to-[#475569]"
+            : "bg-gradient-to-br from-[#1E3A8A] via-[#60A5FA] to-[#C0C0C0] hover:scale-105"
         }`}
       >
         {showOptions || showChat ? (
@@ -1164,12 +1164,12 @@ function ChatbotBubble() {
 
         {/* Animated Pulse Ring */}
         {!showOptions && !showChat && (
-          <div className="absolute inset-0 rounded-full bg-[#FFD700] opacity-20 animate-pulse" />
+          <div className="absolute inset-0 rounded-full bg-[#60A5FA] opacity-15 animate-pulse" />
         )}
 
         {/* Notification Badge */}
         {!showOptions && !showChat && (
-          <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 flex items-center justify-center text-white text-[10px] font-bold animate-bounce">
+          <div className="absolute -top-0 -right-0 w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-white text-[9px] font-bold animate-bounce">
             1
           </div>
         )}
@@ -1177,7 +1177,7 @@ function ChatbotBubble() {
 
       {/* Floating Label */}
       {!showOptions && !showChat && (
-        <div className="absolute bottom-20 right-2 bg-[#1a1a1a] text-white text-[12px] px-3 py-1.5 rounded-full whitespace-nowrap animate-bounce opacity-80 pointer-events-none">
+        <div className="absolute bottom-24 right-2 bg-[#1a1a1a] text-white text-[12px] px-3 py-1.5 rounded-full whitespace-nowrap animate-bounce opacity-80 hidden md:block pointer-events-none">
           💬 Chat with us
         </div>
       )}
