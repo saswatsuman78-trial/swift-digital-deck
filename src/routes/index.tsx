@@ -9,7 +9,7 @@ import {
   MessageCircle, Send, ExternalLink,
   Paintbrush, Settings, ClipboardList, CarFront, FileCheck, CreditCard,
   RefreshCw, Banknote, Package, Disc3, SunMedium, Gauge,
-  LifeBuoy, BookMarked, Navigation, ChevronLeft,
+  LifeBuoy, BookMarked, Navigation, ChevronLeft, LayoutGrid,
   Newspaper, Radio, TrendingUp, Megaphone, Building2, Rocket, Globe, Heart,
 } from "lucide-react";
 import swiftImg from "@/assets/swift.png";
@@ -29,10 +29,64 @@ export const Route = createFileRoute("/")({
 
 /* ---------- Reusable atoms ---------- */
 
-function SectionHeader({ label, title, action, onAction }: { label?: string; title: string; action?: string; onAction?: () => void }) {
+type SectionVariant = "primary" | "default" | "compact";
+
+function SectionHeader({ label, title, action, onAction, variant = "default", icon }: {
+  label?: string;
+  title: string;
+  action?: string;
+  onAction?: () => void;
+  variant?: SectionVariant;
+  icon?: React.ReactNode;
+}) {
+  if (variant === "primary") {
+    return (
+      <div className="px-5 mb-4">
+        <div className="flex items-center gap-2 mb-1.5">
+          {icon && <div className="text-accent">{icon}</div>}
+          {label && <div className="text-[10px] uppercase tracking-[0.14em] font-bold text-accent">{label}</div>}
+        </div>
+        <div className="flex items-end justify-between">
+          <h2 className="font-serif text-[22px] font-semibold text-foreground tracking-tight leading-tight">{title}</h2>
+          {action && (
+            <button onClick={onAction} className="text-[13px] font-semibold text-accent flex items-center gap-0.5 hover:gap-1.5 transition-all">
+              {action} <ChevronRight size={14} />
+            </button>
+          )}
+        </div>
+
+      </div>
+    );
+  }
+
+  if (variant === "compact") {
+    return (
+      <div className="px-5 mb-2.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            {icon && <span className="text-muted-foreground">{icon}</span>}
+            {label && <span className="text-[10px] uppercase tracking-[0.1em] font-semibold text-muted-foreground">{label} ·</span>}
+            <h2 className="text-[15px] font-semibold text-foreground tracking-tight">{title}</h2>
+          </div>
+          {action && (
+            <button onClick={onAction} className="text-[12px] font-medium text-accent flex items-center gap-0.5">
+              {action} <ChevronRight size={12} />
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // default
   return (
     <div className="px-5 mb-3">
-      {label && <div className="section-label mb-1">{label}</div>}
+      {label && (
+        <div className="flex items-center gap-1.5 mb-1">
+          {icon && <span className="text-accent">{icon}</span>}
+          <div className="section-label">{label}</div>
+        </div>
+      )}
       <div className="flex items-end justify-between">
         <h2 className="text-[18px] font-semibold text-foreground tracking-tight">{title}</h2>
         {action && (
@@ -396,9 +450,9 @@ function QuickActions() {
   return (
     <>
       <div className="mt-2">
-        <SectionHeader label="Car Care" title="Complete care for your car" action="View All" onAction={() => setShowPopup(true)} />
+        <SectionHeader label="Car Care" title="Complete care for your car" variant="primary" icon={<Wrench size={14} />} />
         <div className="px-5">
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-5 gap-3">
             {topActions.map((a) => (
               <button key={a.label} className="flex flex-col items-center gap-2 active:scale-95 transition-transform">
                 <div
@@ -411,6 +465,12 @@ function QuickActions() {
                 <span className="text-[11px] leading-tight text-foreground text-center font-medium">{a.label}</span>
               </button>
             ))}
+            <button onClick={() => setShowPopup(true)} className="flex flex-col items-center gap-2 active:scale-95 transition-transform">
+              <div className="relative w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm bg-[#F3F4F6] text-[#6B7280]">
+                <LayoutGrid size={22} />
+              </div>
+              <span className="text-[11px] leading-tight text-foreground text-center font-medium">More</span>
+            </button>
           </div>
         </div>
       </div>
@@ -422,59 +482,65 @@ function QuickActions() {
 /* ---------- My Car Health Card ---------- */
 
 function MyCarCard() {
-  const pct = 86; // 86% of service interval used
   return (
     <div className="px-5 mt-8">
-      <SectionHeader label="My Car" title="Swift VXI · health" />
-      <div className="relative rounded-[20px] bg-white hairline shadow-elev p-5 overflow-hidden">
-        <div className="absolute -right-6 top-2 w-[180px] opacity-95 pointer-events-none">
-          <img src={swiftImg} alt="Swift VXI" className="w-full" />
+      <SectionHeader label="My Car" title="Swift VXI · overview" icon={<Car size={14} />} />
+      <div className="rounded-[20px] bg-white hairline shadow-elev overflow-hidden">
+        {/* Car image banner */}
+        <div className="h-[130px] bg-gradient-to-b from-[#F0F4FF] to-[#F9FAFB] flex items-center justify-center">
+          <img src={swiftImg} alt="Swift VXI" className="w-[220px] max-h-[120px] object-contain drop-shadow-lg" />
         </div>
-        <div className="relative">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] uppercase tracking-[0.12em] font-semibold text-muted-foreground">2022 · Petrol</span>
-            <BadgeCheck size={14} className="text-[color:var(--success)]" />
-          </div>
-          <div className="font-serif text-[20px] leading-tight text-foreground mt-1">Swift VXI</div>
-          <div className="text-[11.5px] text-muted-foreground">DL 4C AB 1234</div>
 
-          <div className="grid grid-cols-3 gap-3 mt-5 max-w-[230px]">
+        <div className="p-5 pt-4">
+          {/* Car identity */}
+          <div className="flex items-center justify-between">
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Odometer</div>
-              <div className="text-[14px] font-semibold text-foreground mt-0.5">42,340 km</div>
+              <div className="font-serif text-[20px] leading-tight text-foreground">Swift VXI</div>
+              <div className="text-[12px] text-muted-foreground mt-0.5">DL 4C AB 1234</div>
             </div>
-            <div>
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Last Svc</div>
-              <div className="text-[14px] font-semibold text-foreground mt-0.5">6 mo ago</div>
-            </div>
-            <div>
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Next Due</div>
-              <div className="text-[14px] font-semibold text-[#D97706] mt-0.5">~800 km</div>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EDFAF4]">
+              <BadgeCheck size={13} className="text-[color:var(--success)]" />
+              <span className="text-[10.5px] font-semibold text-[#12A150]">2022 · Petrol</span>
             </div>
           </div>
 
-          <div className="mt-4">
-            <div className="h-1.5 rounded-full bg-[#F1F2F6] overflow-hidden">
-              <div
-                className="h-full rounded-full"
-                style={{
-                  width: `${pct}%`,
-                  background: "linear-gradient(90deg, #12A150 0%, #F59E0B 70%, #DC2626 100%)",
-                  transition: "width 700ms ease-out",
-                }}
-              />
+          {/* Key info cards */}
+          <div className="grid grid-cols-3 gap-2.5 mt-5">
+            <div className="rounded-xl bg-[#EEF4FF] px-3 py-3 text-center">
+              <div className="text-[9px] uppercase tracking-wider text-[#1F6FEB] font-bold">Last Service</div>
+              <div className="text-[14px] font-bold text-foreground mt-1">12 Nov '24</div>
             </div>
-            <div className="flex justify-between text-[10.5px] text-muted-foreground mt-1.5">
-              <span>Last 10,000 km service</span>
-              <span className="text-[#D97706] font-semibold">86% used</span>
+            <div className="rounded-xl bg-[#FEF3C7] px-3 py-3 text-center">
+              <div className="text-[9px] uppercase tracking-wider text-[#D97706] font-bold">Next Service</div>
+              <div className="text-[14px] font-bold text-foreground mt-1">Jun '25</div>
+            </div>
+            <div className="rounded-xl bg-[#EDFAF4] px-3 py-3 text-center">
+              <div className="text-[9px] uppercase tracking-wider text-[#12A150] font-bold">Insurance</div>
+              <div className="text-[14px] font-bold text-foreground mt-1">45 days</div>
             </div>
           </div>
 
-          <div className="flex gap-2 mt-5">
-            <button className="flex-1 h-10 rounded-full border border-accent text-accent text-[13px] font-semibold">
+          {/* Quick action chips */}
+          <div className="flex gap-2 mt-4">
+            {[
+              { icon: <ClipboardList size={13} />, label: "Service History" },
+              { icon: <FileCheck size={13} />, label: "Download RC" },
+              { icon: <Share2 size={13} />, label: "Share Car" },
+            ].map((chip) => (
+              <button
+                key={chip.label}
+                className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 rounded-xl bg-[#F3F4F6] text-[11px] font-semibold text-foreground hover:bg-[#E5E7EB] transition-colors active:scale-95"
+              >
+                {chip.icon} {chip.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex gap-2.5 mt-5">
+            <button className="flex-1 h-11 rounded-full border border-accent text-accent text-[13px] font-semibold">
               View Report
             </button>
-            <button className="flex-[1.3] h-10 rounded-full bg-accent text-white text-[13px] font-semibold inline-flex items-center justify-center gap-1">
+            <button className="flex-[1.3] h-11 rounded-full bg-accent text-white text-[13px] font-semibold inline-flex items-center justify-center gap-1">
               Book Service <ChevronRight size={14} />
             </button>
           </div>
@@ -489,21 +555,65 @@ function MyCarCard() {
 function ContextualBanner() {
   return (
     <div className="px-5 mt-8">
-      <div className="relative rounded-[20px] bg-primary text-white p-5 overflow-hidden h-[140px]">
-        <div className="absolute inset-0 opacity-[0.07]" style={{
-          backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
-          backgroundSize: "14px 14px",
+      <div
+        className="relative rounded-[24px] text-white p-6 pb-5 overflow-hidden"
+        style={{ background: "linear-gradient(135deg, #064E3B 0%, #047857 40%, #0D9488 75%, #14B8A6 100%)" }}
+      >
+        {/* Decorative rain drops */}
+        <div className="absolute inset-0 opacity-[0.10]" style={{
+          backgroundImage: `
+            linear-gradient(180deg, transparent 60%, rgba(255,255,255,0.15) 60%, rgba(255,255,255,0.15) 62%, transparent 62%),
+            linear-gradient(180deg, transparent 30%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.1) 32%, transparent 32%)
+          `,
+          backgroundSize: "18px 24px, 12px 18px",
+          backgroundPosition: "0 0, 9px 6px",
         }} />
-        <div className="relative max-w-[64%]">
-          <div className="text-[10px] uppercase tracking-[0.14em] text-white/60 font-semibold">Monsoon Ready</div>
-          <div className="font-serif text-[19px] leading-tight mt-1">Monsoon Care Package</div>
-          <div className="text-[12px] text-white/70 mt-1">All-weather check, wipers, undercoat — ₹999 all-in.</div>
-          <button className="mt-3 inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-[#F59E0B] text-[#3B1D00] text-[12px] font-bold">
-            Add to Cart <ChevronRight size={12} />
-          </button>
+
+        {/* Glowing circle accent */}
+        <div className="absolute -right-8 -top-8 w-[160px] h-[160px] rounded-full" style={{
+          background: "radial-gradient(circle, rgba(20,184,166,0.5) 0%, transparent 70%)",
+        }} />
+
+        {/* Illustration area */}
+        <div
+          className="absolute right-3 bottom-3 w-[120px] h-[120px] rounded-[20px] bg-white/10 backdrop-blur-sm flex flex-col items-center justify-center gap-1"
+          style={{ animation: "float 3s ease-in-out infinite" }}
+        >
+          <CloudRain size={44} className="text-white/90" />
+          <span className="text-[10px] font-bold text-white/60 uppercase tracking-wider">Season</span>
         </div>
-        <div className="absolute right-4 bottom-4 w-[100px] h-[100px] rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-          <Sparkles size={48} className="text-white/80" />
+
+        <div className="relative max-w-[62%]">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/15 backdrop-blur-sm text-[9px] uppercase tracking-[0.14em] font-bold text-white/90 mb-2">
+            <CloudRain size={10} /> Monsoon Ready
+          </div>
+
+          <div className="font-serif text-[24px] leading-[1.15] tracking-tight">
+            Monsoon Care<br />Package
+          </div>
+          <div className="text-[13px] text-white/75 mt-2 leading-snug">
+            All-weather check, wipers, undercoat &amp; more — all included.
+          </div>
+
+          {/* Feature pills */}
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            {["20-pt Check", "Wipers", "Undercoat"].map((f) => (
+              <span key={f} className="inline-flex items-center px-2 py-0.5 rounded-full bg-white/15 text-[10px] font-semibold text-white/90">
+                {f}
+              </span>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3 mt-4">
+            <button className="inline-flex items-center gap-1 px-5 py-2.5 rounded-full bg-[#F59E0B] text-[#3B1D00] text-[13px] font-bold shadow-lg hover:brightness-110 transition-all">
+              Add to Cart <ChevronRight size={14} />
+            </button>
+            <div className="flex flex-col">
+              <span className="text-[18px] font-bold leading-none">₹999</span>
+              <span className="text-[10px] text-white/60 line-through">₹1,499</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -523,25 +633,54 @@ function ExploreCars() {
   ];
   return (
     <div className="mt-8">
-      <SectionHeader label="Discover" title="Explore Cars" action="View All" />
+      <SectionHeader label="Discover" title="Explore Cars" action="View All" variant="primary" icon={<CarFront size={14} />} />
       <div className="flex gap-3 overflow-x-auto no-scrollbar px-5 pb-2 snap-x snap-mandatory">
         {cars.map((c) => (
-          <div key={c.name} className="snap-start min-w-[200px] w-[200px] rounded-2xl bg-white hairline shadow-card overflow-hidden">
-            <div className="h-[110px] bg-gradient-to-b from-[#F7F8FC] to-white flex items-center justify-center">
-              <img src={c.img} alt={c.name} className="w-[170px] max-h-[100px] object-contain" loading="lazy" />
+          <div
+            key={c.name}
+            className="snap-start min-w-[210px] w-[210px] rounded-2xl bg-white overflow-hidden transition-all duration-300 hover:scale-[1.03] group"
+            style={{
+              boxShadow: "0 2px 12px rgba(0,0,0,0.06), 0 0 0 1.5px rgba(0,0,0,0.04)",
+            }}
+          >
+            {/* Image area with shimmer highlight */}
+            <div className="h-[110px] bg-gradient-to-b from-[#F7F8FC] to-white flex items-center justify-center relative overflow-hidden">
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                  background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.6) 50%, transparent 60%)",
+                  backgroundSize: "200% 100%",
+                  animation: "shimmer 2s ease-in-out infinite",
+                }}
+              />
+              {/* Category tag on image */}
+              <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-white/80 backdrop-blur-sm text-[9px] font-bold text-muted-foreground uppercase tracking-wider z-[2]">
+                {c.tag}
+              </div>
+              <img src={c.img} alt={c.name} className="w-[170px] max-h-[100px] object-contain relative z-[1] group-hover:scale-105 transition-transform duration-300" loading="lazy" />
             </div>
             <div className="p-3.5">
-              <div className="text-[14px] font-semibold text-foreground">{c.name}</div>
-              <div className="text-[11px] text-muted-foreground">{c.tag}</div>
-              <div className="text-[12.5px] font-semibold text-[color:var(--success)] mt-1.5">{c.price}</div>
+              {/* Name + Price row */}
+              <div className="flex items-start justify-between gap-2">
+                <div className="font-semibold text-[14px] text-foreground leading-tight">{c.name}</div>
+                <div className="text-[13px] font-bold text-[color:var(--success)] whitespace-nowrap shrink-0">{c.price}</div>
+              </div>
+              <div className="text-[10.5px] text-muted-foreground mt-0.5">Starting price · Ex-showroom</div>
               <div className="flex gap-1.5 mt-3">
-                <button className="flex-1 h-7 rounded-full border border-[rgba(0,0,0,0.12)] text-[11px] font-semibold text-foreground">
+                <button className="flex-1 h-7 rounded-full border border-[rgba(0,0,0,0.12)] text-[11px] font-semibold text-foreground hover:bg-[#F3F4F6] transition-colors">
                   Compare
                 </button>
-                <button className="flex-[1.3] h-7 rounded-full bg-accent text-white text-[11px] font-semibold">
+                <button className="flex-1 h-7 rounded-full bg-accent/10 text-accent text-[11px] font-semibold hover:bg-accent/20 transition-colors">
                   Test Drive
                 </button>
               </div>
+              {/* Buy Now button */}
+              <button className="w-full h-9 mt-2 rounded-full bg-accent text-white text-[12px] font-bold inline-flex items-center justify-center gap-1 shadow-md hover:shadow-lg hover:brightness-110 transition-all active:scale-95 relative overflow-hidden group/buy">
+                <span className="absolute inset-0 rounded-full opacity-0 group-hover/buy:opacity-100 transition-opacity duration-300" style={{
+                  boxShadow: "inset 0 0 0 2px rgba(255,255,255,0.3)",
+                }} />
+                <ShoppingBag size={13} /> Buy Now
+              </button>
             </div>
           </div>
         ))}
@@ -555,7 +694,7 @@ function ExploreCars() {
 function SmartFinance() {
   return (
     <div className="px-5 mt-8">
-      <SectionHeader label="Smart Finance" title="Finance your dream car" />
+      <SectionHeader label="Smart Finance" title="Finance your dream car" icon={<IndianRupee size={14} />} />
       <div className="rounded-[20px] bg-[#EEF4FF] p-5 relative overflow-hidden">
         <div className="absolute right-4 top-4 w-14 h-14 rounded-2xl bg-white flex items-center justify-center shadow-card">
           <Calculator size={26} className="text-accent" />
@@ -611,42 +750,158 @@ function HelpMeDecide() {
   );
 }
 
+/* ---------- Locators Popup ---------- */
+
+function LocatorsPopup({ onClose }: { onClose: () => void }) {
+  const categories = [
+    {
+      title: "Fuel & Energy",
+      icon: <Fuel size={18} />,
+      color: "#1F6FEB",
+      bg: "#EEF4FF",
+      items: [
+        { icon: <Fuel size={20} />, label: "Fuel Pump", color: "#1F6FEB" },
+        { icon: <Zap size={20} />, label: "EV Charging", color: "#12A150" },
+        { icon: <Flame size={20} />, label: "CNG Station", color: "#D97706" },
+      ],
+    },
+    {
+      title: "Parking & Services",
+      icon: <ParkingCircle size={18} />,
+      color: "#7C3AED",
+      bg: "#F3F0FF",
+      items: [
+        { icon: <ParkingCircle size={20} />, label: "Parking", color: "#7C3AED" },
+        { icon: <SunMedium size={20} />, label: "Car Wash", color: "#0891B2" },
+        { icon: <Disc3 size={20} />, label: "Tyre Shop", color: "#E11D48" },
+      ],
+    },
+    {
+      title: "Government",
+      icon: <FileCheck size={18} />,
+      color: "#D97706",
+      bg: "#FEF3C7",
+      items: [
+        { icon: <Locate size={20} />, label: "PUC Centre", color: "#D97706" },
+        { icon: <Building2 size={20} />, label: "RTO Office", color: "#1F6FEB" },
+        { icon: <Receipt size={20} />, label: "Toll Plaza", color: "#7C3AED" },
+      ],
+    },
+    {
+      title: "Learning & Help",
+      icon: <GraduationCap size={18} />,
+      color: "#0891B2",
+      bg: "#ECFEFF",
+      items: [
+        { icon: <GraduationCap size={20} />, label: "Driving School", color: "#0891B2" },
+        { icon: <LifeBuoy size={20} />, label: "Roadside SOS", color: "#DC2626" },
+        { icon: <MapPin size={20} />, label: "Nearest Dealer", color: "#12A150" },
+      ],
+    },
+  ];
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+      <div
+        className="relative w-full max-w-[440px] max-h-[75dvh] bg-white rounded-t-[28px] overflow-hidden animate-slide-up"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex justify-center pt-3 pb-1">
+          <div className="w-10 h-1 rounded-full bg-[#D1D5DB]" />
+        </div>
+        <div className="flex items-center justify-between px-5 pb-4 pt-1">
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground font-semibold">Near You</div>
+            <h2 className="text-[20px] font-serif font-semibold text-foreground tracking-tight">All Locations</h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-9 h-9 rounded-full bg-[#F3F4F6] flex items-center justify-center text-foreground hover:bg-[#E5E7EB] transition-colors"
+          >
+            <X size={18} />
+          </button>
+        </div>
+        <div className="overflow-y-auto px-5 pb-8" style={{ maxHeight: "calc(75dvh - 90px)" }}>
+          <div className="space-y-6">
+            {categories.map((cat) => (
+              <div key={cat.title}>
+                <div className="flex items-center gap-2 mb-3">
+                  <div
+                    className="w-7 h-7 rounded-lg flex items-center justify-center"
+                    style={{ background: cat.bg, color: cat.color }}
+                  >
+                    {cat.icon}
+                  </div>
+                  <span className="text-[14px] font-semibold text-foreground">{cat.title}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  {cat.items.map((a) => (
+                    <button key={a.label} className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform">
+                      <div
+                        className="w-12 h-12 rounded-2xl bg-white shadow-card flex items-center justify-center"
+                        style={{ color: a.color }}
+                      >
+                        {a.icon}
+                      </div>
+                      <span className="text-[10.5px] leading-tight text-foreground text-center font-medium">{a.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ---------- Smart Locators ---------- */
 
 function SmartLocators() {
+  const [showPopup, setShowPopup] = useState(false);
   const items = [
     { icon: <Fuel size={20} />, label: "Fuel Pump", color: "#1F6FEB" },
     { icon: <Zap size={20} />, label: "EV Charging", color: "#12A150" },
     { icon: <ParkingCircle size={20} />, label: "Parking", color: "#7C3AED" },
     { icon: <Locate size={20} />, label: "PUC Centre", color: "#D97706" },
-    { icon: <GraduationCap size={20} />, label: "Driving", color: "#0891B2" },
   ];
   return (
-    <div className="mt-8">
-      <div className="px-5 flex items-center gap-1.5 mb-3">
-        <MapPin size={14} className="text-accent" />
-        <div className="section-label !text-foreground">Near You</div>
-      </div>
-      <div className="mx-5 relative rounded-2xl bg-white hairline shadow-card overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.5]" style={{
-          backgroundImage: `
-            linear-gradient(rgba(31,111,235,0.06) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(31,111,235,0.06) 1px, transparent 1px)
-          `,
-          backgroundSize: "22px 22px",
-        }} />
-        <div className="relative grid grid-cols-5 gap-1 p-3.5">
-          {items.map((a) => (
-            <button key={a.label} className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform">
-              <div className="w-11 h-11 rounded-2xl bg-white shadow-card flex items-center justify-center" style={{ color: a.color }}>
-                {a.icon}
+    <>
+      <div className="mt-8">
+        <div className="px-5 flex items-center gap-1.5 mb-3">
+          <MapPin size={14} className="text-accent" />
+          <div className="section-label !text-foreground">Near You</div>
+        </div>
+        <div className="mx-5 relative rounded-2xl bg-white hairline shadow-card overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.5]" style={{
+            backgroundImage: `
+              linear-gradient(rgba(31,111,235,0.06) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(31,111,235,0.06) 1px, transparent 1px)
+            `,
+            backgroundSize: "22px 22px",
+          }} />
+          <div className="relative grid grid-cols-5 gap-1 p-3.5">
+            {items.map((a) => (
+              <button key={a.label} className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform">
+                <div className="w-11 h-11 rounded-2xl bg-white shadow-card flex items-center justify-center" style={{ color: a.color }}>
+                  {a.icon}
+                </div>
+                <span className="text-[10.5px] font-medium text-foreground text-center leading-tight">{a.label}</span>
+              </button>
+            ))}
+            <button onClick={() => setShowPopup(true)} className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform">
+              <div className="w-11 h-11 rounded-2xl bg-[#F3F4F6] shadow-card flex items-center justify-center text-[#6B7280]">
+                <LayoutGrid size={20} />
               </div>
-              <span className="text-[10.5px] font-medium text-foreground text-center leading-tight">{a.label}</span>
+              <span className="text-[10.5px] font-medium text-foreground text-center leading-tight">More</span>
             </button>
-          ))}
+          </div>
         </div>
       </div>
-    </div>
+      {showPopup && <LocatorsPopup onClose={() => setShowPopup(false)} />}
+    </>
   );
 }
 
@@ -660,7 +915,7 @@ function Utilities() {
   ];
   return (
     <div className="mt-8">
-      <SectionHeader label="Essentials" title="On-road essentials" />
+      <SectionHeader label="Essentials" title="On-road essentials" variant="compact" icon={<Gauge size={14} />} />
       <div className="px-5 space-y-2.5">
         {items.map((u) => (
           <button key={u.title} className="w-full flex items-center gap-3.5 p-3.5 rounded-2xl bg-white hairline shadow-card">
@@ -689,26 +944,68 @@ function TrueValue() {
   ];
   return (
     <div className="mt-8">
-      <SectionHeader label="True Value" title="Buy or sell pre-owned" action="Browse" />
+      <SectionHeader label="True Value" title="Buy or sell pre-owned" action="Browse" variant="primary" icon={<ArrowLeftRight size={14} />} />
       <div className="flex gap-3 overflow-x-auto no-scrollbar px-5 pb-2">
         {cars.map((c) => (
-          <div key={c.name} className="min-w-[180px] w-[180px] rounded-2xl bg-white hairline shadow-card overflow-hidden">
-            <div className="h-[90px] bg-[#F7F8FC] relative">
-              <img src={c.img} alt={c.name} className="w-full h-full object-contain p-2" loading="lazy" />
-              <div className="absolute top-1.5 left-1.5 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-[color:var(--success)] text-white text-[9px] font-bold">
+          <div
+            key={c.name}
+            className="min-w-[190px] w-[190px] rounded-2xl bg-white overflow-hidden transition-all duration-300 hover:scale-[1.03] group"
+            style={{
+              boxShadow: "0 2px 12px rgba(0,0,0,0.06), 0 0 0 1.5px rgba(0,0,0,0.04)",
+            }}
+          >
+            <div className="h-[100px] bg-[#F7F8FC] relative overflow-hidden">
+              {/* Shimmer on hover */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[1]"
+                style={{
+                  background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.6) 50%, transparent 60%)",
+                  backgroundSize: "200% 100%",
+                  animation: "shimmer 2s ease-in-out infinite",
+                }}
+              />
+              <img src={c.img} alt={c.name} className="w-full h-full object-contain p-2 relative z-[0] group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              <div className="absolute top-1.5 left-1.5 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-[color:var(--success)] text-white text-[9px] font-bold z-[2]">
                 <BadgeCheck size={9} /> Certified
+              </div>
+              <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full bg-white/80 backdrop-blur-sm text-[9px] font-bold text-muted-foreground z-[2]">
+                {c.year}
               </div>
             </div>
             <div className="p-3">
-              <div className="text-[13px] font-semibold text-foreground">{c.name}</div>
-              <div className="text-[10.5px] text-muted-foreground">{c.year} · {c.km}</div>
-              <div className="flex items-center justify-between mt-1.5">
-                <div className="text-[13px] font-bold text-foreground">{c.price}</div>
-                <ChevronRight size={14} className="text-accent" />
+              <div className="flex items-start justify-between gap-1.5">
+                <div className="text-[13px] font-semibold text-foreground leading-tight">{c.name}</div>
+                <div className="text-[13px] font-bold text-foreground whitespace-nowrap shrink-0">{c.price}</div>
               </div>
+              <div className="text-[10.5px] text-muted-foreground mt-0.5">{c.km} · Petrol</div>
+              {/* Enquire button per card */}
+              <button className="w-full h-8 mt-2.5 rounded-full bg-accent text-white text-[11px] font-bold inline-flex items-center justify-center gap-1 hover:brightness-110 transition-all active:scale-95">
+                <Phone size={11} /> Enquire Now
+              </button>
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Common Sell Your Car CTA */}
+      <div className="px-5 mt-4">
+        <button
+          className="w-full relative rounded-2xl p-4 text-white overflow-hidden flex items-center gap-3 active:scale-[0.98] transition-transform"
+          style={{ background: "linear-gradient(135deg, #1E3A5F 0%, #2563EB 50%, #3B82F6 100%)" }}
+        >
+          <div className="absolute inset-0 opacity-[0.08]" style={{
+            backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+            backgroundSize: "16px 16px",
+          }} />
+          <div className="relative w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center shrink-0">
+            <ArrowLeftRight size={22} className="text-white" />
+          </div>
+          <div className="relative flex-1 text-left">
+            <div className="font-semibold text-[14px]">Sell Your Car</div>
+            <div className="text-[11px] text-white/70 mt-0.5">Get the best price instantly — free evaluation</div>
+          </div>
+          <ChevronRight size={18} className="relative text-white/60 shrink-0" />
+        </button>
       </div>
     </div>
   );
@@ -1126,8 +1423,8 @@ const STORIES: Story[] = [
     label: "New Swift",
     bg: "bg-gradient-to-br from-[#0D1B40] via-[#1E3A8A] to-[#3B82F6]",
     visual: (
-      <div className="w-full h-full flex items-end justify-center bg-gradient-to-br from-[#0D1B40] via-[#1E3A8A] to-[#3B82F6]">
-        <img src={swiftImg} alt="" className="w-[110%] max-w-none -mb-1 object-contain drop-shadow-2xl" />
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0D1B40] via-[#1E3A8A] to-[#3B82F6] p-2">
+        <img src={swiftImg} alt="" className="w-[90%] object-contain drop-shadow-2xl" />
       </div>
     ),
     cta: "Explore Now",
@@ -1569,7 +1866,7 @@ function ChatbotBubble() {
               <MessageCircle size={18} strokeWidth={2} />
             </div>
             <div className="flex-1">
-              <div className="font-bold text-[13px] text-[#1a1a1a] group-hover:text-amber-700">Chat with Bot</div>
+              <div className="font-bold text-[13px] text-[#1a1a1a] group-hover:text-amber-700">Chat with AI</div>
               <div className="text-[11px] text-[#666]">Instant responses</div>
             </div>
             <ChevronRight size={14} className="text-[#999] group-hover:text-amber-600" />
@@ -1627,15 +1924,44 @@ function Home() {
         <StoriesRail onOpen={(i) => setStoryIdx(i)} />
         {alertOpen && <ServiceAlert onDismiss={() => setAlertOpen(false)} />}
         <HeroCarousel />
+
+        {/* ── Section: Car Care ── */}
         <QuickActions />
+
+        {/* divider */}
+        <div className="mx-5 my-4 h-px bg-[rgba(0,0,0,0.06)]" />
+
+        {/* ── Section: My Car ── */}
         <MyCarCard />
         <ContextualBanner />
-        <ExploreCars />
-        <SmartFinance />
+
+        {/* divider */}
+        <div className="mx-5 my-4 h-px bg-[rgba(0,0,0,0.06)]" />
+
+        {/* ── Section: Find & Explore ── */}
         <HelpMeDecide />
+        <div className="mt-4" />
+        <ExploreCars />
+
+        {/* divider */}
+        <div className="mx-5 my-4 h-px bg-[rgba(0,0,0,0.06)]" />
+
+        {/* ── Section: Finance ── */}
+        <SmartFinance />
+
+        {/* divider */}
+        <div className="mx-5 my-4 h-px bg-[rgba(0,0,0,0.06)]" />
+
+        {/* ── Section: Locators & Utilities ── */}
         <SmartLocators />
         <Utilities />
+
+        {/* divider */}
+        <div className="mx-5 my-4 h-px bg-[rgba(0,0,0,0.06)]" />
+
+        {/* ── Section: Pre-owned ── */}
         <TrueValue />
+
         <div className="h-8" />
         <div className="relative sticky bottom-0 z-30">
           <ChatbotBubble />
