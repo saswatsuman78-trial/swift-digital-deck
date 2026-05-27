@@ -230,7 +230,7 @@ function HeroCarousel() {
         if (el) el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
         return next;
       });
-    }, 4500);
+    }, 6000);
     return () => clearInterval(id);
   }, [slides.length]);
 
@@ -766,6 +766,17 @@ function LocatorsPopup({ onClose }: { onClose: () => void }) {
       ],
     },
     {
+      title: "Learning & Help",
+      icon: <GraduationCap size={18} />,
+      color: "#0891B2",
+      bg: "#ECFEFF",
+      items: [
+        { icon: <GraduationCap size={20} />, label: "Driving School", color: "#0891B2" },
+        { icon: <LifeBuoy size={20} />, label: "Roadside SOS", color: "#DC2626" },
+        { icon: <MapPin size={20} />, label: "Nearest Dealer", color: "#12A150" },
+      ],
+    },
+    {
       title: "Parking & Services",
       icon: <ParkingCircle size={18} />,
       color: "#7C3AED",
@@ -785,17 +796,6 @@ function LocatorsPopup({ onClose }: { onClose: () => void }) {
         { icon: <Locate size={20} />, label: "PUC Centre", color: "#D97706" },
         { icon: <Building2 size={20} />, label: "RTO Office", color: "#1F6FEB" },
         { icon: <Receipt size={20} />, label: "Toll Plaza", color: "#7C3AED" },
-      ],
-    },
-    {
-      title: "Learning & Help",
-      icon: <GraduationCap size={18} />,
-      color: "#0891B2",
-      bg: "#ECFEFF",
-      items: [
-        { icon: <GraduationCap size={20} />, label: "Driving School", color: "#0891B2" },
-        { icon: <LifeBuoy size={20} />, label: "Roadside SOS", color: "#DC2626" },
-        { icon: <MapPin size={20} />, label: "Nearest Dealer", color: "#12A150" },
       ],
     },
   ];
@@ -1320,15 +1320,14 @@ function NewsCardViewer({ onClose }: { onClose: () => void }) {
             onMouseMove={onMouseMove}
             onMouseUp={onMouseUp}
             onMouseLeave={onMouseLeave}
-            className={`absolute inset-0 rounded-[24px] overflow-hidden cursor-grab active:cursor-grabbing select-none z-20 ${
-              exitAnim ? "transition-all duration-300 ease-out" : dragState.dragging ? "" : "transition-transform duration-200 ease-out"
-            }`}
+            className={`absolute inset-0 rounded-[24px] overflow-hidden cursor-grab active:cursor-grabbing select-none z-20 ${exitAnim ? "transition-all duration-300 ease-out" : dragState.dragging ? "" : "transition-transform duration-200 ease-out"
+              }`}
             style={{
               transform: exitAnim === "left"
                 ? "translateX(-150%) rotate(-20deg)"
                 : exitAnim === "right"
-                ? "translateX(150%) rotate(20deg)"
-                : `translateX(${dragState.x}px) translateY(${dragState.y}px) rotate(${rotation}deg)`,
+                  ? "translateX(150%) rotate(20deg)"
+                  : `translateX(${dragState.x}px) translateY(${dragState.y}px) rotate(${rotation}deg)`,
               opacity: exitAnim ? 0 : opacity,
             }}
           >
@@ -1388,13 +1387,12 @@ function NewsCardViewer({ onClose }: { onClose: () => void }) {
         {NEWS_ITEMS.map((item, i) => (
           <div
             key={item.id}
-            className={`h-1 rounded-full transition-all duration-300 ${
-              i < NEWS_ITEMS.length - cards.length
+            className={`h-1 rounded-full transition-all duration-300 ${i < NEWS_ITEMS.length - cards.length
                 ? "w-4 bg-white/60"
                 : i === NEWS_ITEMS.length - cards.length
-                ? "w-6 bg-white"
-                : "w-2 bg-white/20"
-            }`}
+                  ? "w-6 bg-white"
+                  : "w-2 bg-white/20"
+              }`}
           />
         ))}
       </div>
@@ -1499,19 +1497,16 @@ function StoryBubble({ story, onTap }: { story: Story; onTap: () => void }) {
     >
       <div className="relative">
         <div
-          className={`w-[76px] h-[76px] rounded-full p-[3px] transition-all duration-300 ${
-            story.seen
+          className={`w-[76px] h-[76px] rounded-full p-[3px] transition-all duration-300 ${story.seen
               ? "bg-gradient-to-br from-[#D3D3D3] to-[#A9A9A9]"
               : "bg-gradient-to-br from-[#FFD700] via-[#C0C0C0] to-[#DAA520] shadow-lg"
-          }`}
+            }`}
         >
-          <div className={`w-full h-full rounded-full bg-white p-[2.5px] transition-all ${
-            story.seen ? "shadow-sm" : "shadow-md"
-          }`}>
+          <div className={`w-full h-full rounded-full bg-white p-[2.5px] transition-all ${story.seen ? "shadow-sm" : "shadow-md"
+            }`}>
             <div
-              className={`w-full h-full rounded-full overflow-hidden transition-all duration-300 ${
-                story.seen ? "opacity-60 saturate-40 blur-[0.5px]" : "opacity-100 saturate-100"
-              }`}
+              className={`w-full h-full rounded-full overflow-hidden transition-all duration-300 ${story.seen ? "opacity-60 saturate-40 blur-[0.5px]" : "opacity-100 saturate-100"
+                }`}
             >
               {story.visual}
             </div>
@@ -1521,9 +1516,8 @@ function StoryBubble({ story, onTap }: { story: Story; onTap: () => void }) {
           <span className="absolute top-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-[#FFD700] ring-2 ring-white shadow-md animate-pulse" />
         )}
       </div>
-      <div className={`text-[10px] leading-tight text-center font-semibold transition-all duration-300 line-clamp-2 px-0.5 ${
-        story.seen ? "text-[#999999]" : "text-[#1a1a1a]"
-      }`}>
+      <div className={`text-[10px] leading-tight text-center font-semibold transition-all duration-300 line-clamp-2 px-0.5 ${story.seen ? "text-[#999999]" : "text-[#1a1a1a]"
+        }`}>
         {story.label}
       </div>
     </button>
@@ -1787,11 +1781,10 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
             <div
-              className={`max-w-[260px] px-4 py-2 rounded-xl ${
-                msg.sender === "user"
+              className={`max-w-[260px] px-4 py-2 rounded-xl ${msg.sender === "user"
                   ? "bg-gradient-to-r from-[#FFD700] to-[#DAA520] text-[#1a1a1a] font-medium"
                   : "bg-white text-[#1a1a1a] border border-[#E5E7EB]"
-              }`}
+                }`}
             >
               {msg.text}
             </div>
@@ -1883,11 +1876,10 @@ function ChatbotBubble() {
             setShowOptions(!showOptions);
           }
         }}
-        className={`relative w-12 h-12 rounded-full shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center justify-center font-bold text-white text-lg group ${
-          showOptions || showChat
+        className={`relative w-12 h-12 rounded-full shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center justify-center font-bold text-white text-lg group ${showOptions || showChat
             ? "bg-gradient-to-br from-[#1E3A8A] to-[#475569]"
             : "bg-gradient-to-br from-[#1E3A8A] via-[#60A5FA] to-[#C0C0C0] hover:scale-105"
-        }`}
+          }`}
       >
         {showOptions || showChat ? (
           <X size={24} strokeWidth={3} />
