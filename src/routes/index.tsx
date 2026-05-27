@@ -1110,142 +1110,79 @@ function NewsCardViewer({ onClose }: { onClose: () => void }) {
 type Story = {
   id: string;
   label: string;
-  bg: string; // tailwind gradient or solid bg classes for fullscreen + bubble
-  ring?: "gradient" | "gray";
-  visual: React.ReactNode; // inner bubble visual
+  bg: string;
+  visual: React.ReactNode;
   cta: string;
   headline: string;
   sub: string;
   seen?: boolean;
   isReview?: boolean;
+  videoScene: "particles" | "waves" | "aurora" | "circuit" | "rain";
 };
 
 const STORIES: Story[] = [
   {
-    id: "offer",
-    label: "Exclusive Service",
-    bg: "bg-gradient-to-br from-[#D4AF37] via-[#B8860B] to-[#8B6914]",
-    visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#D4AF37] via-[#B8860B] to-[#8B6914]">
-        <Flame size={32} className="text-white drop-shadow-lg" />
-      </div>
-    ),
-    cta: "Book Now",
-    headline: "Nexa Premium Service",
-    sub: "20% off + complimentary detailing · Limited slots available",
-  },
-  {
     id: "swift",
-    label: "Swift Nexa",
-    bg: "bg-gradient-to-br from-[#C0C0C0] via-[#808080] to-[#404040]",
+    label: "New Swift",
+    bg: "bg-gradient-to-br from-[#0D1B40] via-[#1E3A8A] to-[#3B82F6]",
     visual: (
-      <div className="w-full h-full flex items-end justify-center bg-gradient-to-br from-[#C0C0C0] via-[#808080] to-[#404040]">
+      <div className="w-full h-full flex items-end justify-center bg-gradient-to-br from-[#0D1B40] via-[#1E3A8A] to-[#3B82F6]">
         <img src={swiftImg} alt="" className="w-[110%] max-w-none -mb-1 object-contain drop-shadow-2xl" />
       </div>
     ),
-    cta: "Discover More",
-    headline: "Swift Nexa Edition",
-    sub: "Engineered for sophistication · Advanced safety tech",
-  },
-  {
-    id: "emi",
-    label: "Smart Finance",
-    bg: "bg-gradient-to-br from-[#E8B4B8] via-[#C9A2A6] to-[#8B5A62]",
-    visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#E8B4B8] via-[#C9A2A6] to-[#8B5A62]">
-        <IndianRupee size={32} className="text-white drop-shadow-lg" strokeWidth={2.5} />
-      </div>
-    ),
-    cta: "Calculate EMI",
-    headline: "Flexible EMI Options",
-    sub: "Starting from ₹5,999/mo · Instant approval",
-  },
-  {
-    id: "insurance",
-    label: "Protection Plus",
-    bg: "bg-gradient-to-br from-[#F4A460] via-[#D2691E] to-[#8B4513]",
-    visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#F4A460] via-[#D2691E] to-[#8B4513]">
-        <ShieldCheck size={32} className="text-white drop-shadow-lg" />
-      </div>
-    ),
-    cta: "Renew Coverage",
-    headline: "Insurance Excellence",
-    sub: "Best rate guaranteed · 4,200+ workshops nationwide",
-  },
-  {
-    id: "accessories",
-    label: "Premium Add-ons",
-    bg: "bg-gradient-to-br from-[#696969] via-[#505050] to-[#1a1a1a]",
-    visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#696969] via-[#505050] to-[#1a1a1a]">
-        <Camera size={32} className="text-white drop-shadow-lg" />
-      </div>
-    ),
-    cta: "Explore Range",
-    headline: "Curated Accessories",
-    sub: "Premium quality · Professional installation available",
-    seen: true,
-  },
-  {
-    id: "benefits",
-    label: "Elite Rewards",
-    bg: "bg-gradient-to-br from-[#FFD700] via-[#DAA520] to-[#B8860B]",
-    visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#FFD700] via-[#DAA520] to-[#B8860B]">
-        <Trophy size={32} className="text-white drop-shadow-lg" />
-      </div>
-    ),
-    cta: "View Benefits",
-    headline: "Platinum Member Status",
-    sub: "5,000 reward points · Exclusive access & privileges",
-  },
-  {
-    id: "tv",
-    label: "True Value Experience",
-    bg: "bg-gradient-to-br from-[#20B2AA] via-[#008B8B] to-[#004D4D]",
-    visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#20B2AA] via-[#008B8B] to-[#004D4D]">
-        <MapPin size={32} className="text-white drop-shadow-lg" />
-      </div>
-    ),
-    cta: "Get Directions",
-    headline: "True Value Festival",
-    sub: "Curated pre-owned collection · Premium condition guarantee",
-    seen: true,
-  },
-  {
-    id: "monsoon",
-    label: "Care Guide",
-    bg: "bg-gradient-to-br from-[#A9A9A9] via-[#708090] to-[#2F4F4F]",
-    visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#A9A9A9] via-[#708090] to-[#2F4F4F]">
-        <CloudRain size={32} className="text-white drop-shadow-lg" />
-      </div>
-    ),
-    cta: "Read Guide",
-    headline: "Monsoon Maintenance",
-    sub: "Expert tips for peak performance · Quick read",
+    cta: "Explore Now",
+    headline: "The All-New Swift",
+    sub: "Reimagined for 2026 · 35 km/l hybrid · 6 airbags standard",
+    videoScene: "particles",
   },
   {
     id: "ev",
-    label: "Future Ready",
-    bg: "bg-gradient-to-br from-[#1a1a1a] via-[#2d3142] to-[#0a0a0a]",
+    label: "e-Vitara",
+    bg: "bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#0f3460]",
     visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1a1a1a] via-[#2d3142] to-[#0a0a0a]">
-        <Zap size={32} className="text-[#E0E0E0] drop-shadow-lg" fill="#E0E0E0" />
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#0f3460]">
+        <Zap size={32} className="text-[#60A5FA] drop-shadow-lg" fill="#60A5FA" />
       </div>
     ),
     cta: "Pre-Reserve",
     headline: "e-Vitara Revolution",
-    sub: "500km range · Advanced EV technology · Ultra-fast charging",
+    sub: "500 km range · Ultra-fast charging · Born electric",
+    videoScene: "circuit",
+  },
+  {
+    id: "monsoon",
+    label: "Monsoon Care",
+    bg: "bg-gradient-to-br from-[#064E3B] via-[#0F766E] to-[#2DD4BF]",
+    visual: (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#064E3B] via-[#0F766E] to-[#2DD4BF]">
+        <CloudRain size={32} className="text-white drop-shadow-lg" />
+      </div>
+    ),
+    cta: "Book Camp",
+    headline: "Monsoon Care Camp",
+    sub: "Free 20-point check · Wiper & brake inspection · ₹999 package",
+    videoScene: "rain",
+  },
+  {
+    id: "offer",
+    label: "Mega Offer",
+    bg: "bg-gradient-to-br from-[#78350F] via-[#B45309] to-[#F59E0B]",
+    visual: (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#78350F] via-[#B45309] to-[#F59E0B]">
+        <Flame size={32} className="text-white drop-shadow-lg" />
+      </div>
+    ),
+    cta: "Grab Now",
+    headline: "Summer Mega Sale",
+    sub: "Up to ₹75,000 off · Exchange bonus · Free accessories",
+    videoScene: "waves",
   },
   {
     id: "review",
-    label: "Your Feedback",
-    bg: "bg-gradient-to-br from-[#B19CD9] via-[#9370DB] to-[#4B0082]",
+    label: "Rate Us",
+    bg: "bg-gradient-to-br from-[#4C1D95] via-[#7C3AED] to-[#A78BFA]",
     visual: (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#B19CD9] via-[#9370DB] to-[#4B0082]">
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#4C1D95] via-[#7C3AED] to-[#A78BFA]">
         <Star size={32} className="text-white drop-shadow-lg" fill="white" />
       </div>
     ),
@@ -1253,6 +1190,7 @@ const STORIES: Story[] = [
     headline: "Share Your Experience",
     sub: "Your feedback drives our excellence",
     isReview: true,
+    videoScene: "aurora",
   },
 ];
 
@@ -1314,190 +1252,173 @@ function ReviewOverlay({ story }: { story: Story }) {
   return (
     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-white via-white to-[#f9f9f9] rounded-t-3xl p-6 pb-8 shadow-2xl">
       <div className="w-12 h-1 rounded-full bg-gradient-to-r from-[#FFD700] to-[#C0C0C0] mx-auto mb-6 shadow-md" />
-      <div className="font-serif text-[24px] text-[#1a1a1a] leading-tight font-bold">
-        Rate Your Experience
-      </div>
+      <div className="font-serif text-[24px] text-[#1a1a1a] leading-tight font-bold">Rate Your Experience</div>
       <div className="text-[13px] text-[#666] mt-2 font-medium">{story.sub}</div>
       <div className="flex gap-3 mt-6 justify-center">
         {[1, 2, 3, 4, 5].map((n) => (
           <button key={n} onClick={() => setRating(n)} className="p-1 transition-transform hover:scale-110 active:scale-95">
-            <Star
-              size={40}
-              className={n <= rating ? "text-[#FFD700]" : "text-[#E5E7EB]"}
-              fill={n <= rating ? "#FFD700" : "none"}
-              strokeWidth={1.5}
-            />
+            <Star size={40} className={n <= rating ? "text-[#FFD700]" : "text-[#E5E7EB]"} fill={n <= rating ? "#FFD700" : "none"} strokeWidth={1.5} />
           </button>
         ))}
       </div>
-      <input
-        placeholder="Add a comment (optional)"
-        className="w-full mt-6 px-4 py-3 rounded-xl bg-[#f0f0f0] text-[14px] placeholder:text-[#999] text-[#1a1a1a] font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:ring-offset-2 transition-all"
-      />
-      <button className="w-full mt-4 py-3.5 rounded-xl bg-gradient-to-r from-[#FFD700] via-[#C0C0C0] to-[#DAA520] text-[#1a1a1a] font-bold text-[14px] shadow-lg hover:shadow-xl transition-all active:scale-95">
-        Submit Rating
-      </button>
-      <button className="w-full mt-3 py-3 rounded-xl bg-white border-2 border-[#E5E7EB] text-[#1a1a1a] font-bold text-[13px] flex items-center justify-center gap-2 transition-all hover:border-[#FFD700]">
+      <input placeholder="Add a comment (optional)" className="w-full mt-6 px-4 py-3 rounded-xl bg-[#f0f0f0] text-[14px] placeholder:text-[#999] text-[#1a1a1a] font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:ring-offset-2 transition-all" />
+      <button className="w-full mt-4 py-3.5 rounded-xl bg-gradient-to-r from-[#FFD700] via-[#C0C0C0] to-[#DAA520] text-[#1a1a1a] font-bold text-[14px] shadow-lg">Submit Rating</button>
+      <button className="w-full mt-3 py-3 rounded-xl bg-white border-2 border-[#E5E7EB] text-[#1a1a1a] font-bold text-[13px] flex items-center justify-center gap-2">
         <Share2 size={16} strokeWidth={2} /> Share on Google
       </button>
     </div>
   );
 }
 
-function StoriesViewer({
-  startIndex,
-  onClose,
-}: {
-  startIndex: number;
-  onClose: () => void;
-}) {
+function VideoScene({ scene }: { scene: Story["videoScene"] }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const c = canvasRef.current;
+    if (!c) return;
+    const ctx = c.getContext("2d");
+    if (!ctx) return;
+    let raf: number;
+    const dpr = window.devicePixelRatio || 1;
+    c.width = c.offsetWidth * dpr;
+    c.height = c.offsetHeight * dpr;
+    ctx.scale(dpr, dpr);
+    const W = c.offsetWidth;
+    const H = c.offsetHeight;
+    type Pt = { x: number; y: number; vx: number; vy: number; r: number; a: number; hue: number };
+    const pts: Pt[] = [];
+    if (scene === "particles") {
+      for (let i = 0; i < 60; i++) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.6, vy: -Math.random() * 1.2 - 0.3, r: Math.random() * 3 + 1, a: Math.random() * 6, hue: 210 + Math.random() * 40 });
+    } else if (scene === "rain") {
+      for (let i = 0; i < 100; i++) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: -1, vy: Math.random() * 8 + 6, r: Math.random() * 1.5 + 0.5, a: Math.random() * 0.5 + 0.3, hue: 170 });
+    } else if (scene === "circuit") {
+      for (let i = 0; i < 30; i++) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 2 + 1), vy: 0, r: 2, a: Math.random() * 6, hue: 220 + Math.random() * 30 });
+    }
+    let t = 0;
+    const draw = () => {
+      t += 0.016;
+      ctx.clearRect(0, 0, W, H);
+      if (scene === "particles") {
+        for (const p of pts) {
+          p.x += p.vx; p.y += p.vy; p.a += 0.005;
+          if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(${p.hue},80%,70%,${0.3 + Math.sin(p.a) * 0.3})`;
+          ctx.fill();
+        }
+        for (let i = 0; i < 3; i++) {
+          const ox = W * (0.2 + i * 0.3) + Math.sin(t + i * 2) * 30;
+          const oy = H * 0.4 + Math.cos(t * 0.7 + i) * 50;
+          const g = ctx.createRadialGradient(ox, oy, 0, ox, oy, 80);
+          g.addColorStop(0, "hsla(220,90%,70%,0.15)"); g.addColorStop(1, "transparent");
+          ctx.fillStyle = g; ctx.fillRect(ox - 80, oy - 80, 160, 160);
+        }
+      } else if (scene === "waves") {
+        for (let w = 0; w < 4; w++) {
+          ctx.beginPath();
+          for (let x = 0; x <= W; x += 4) {
+            const y = H * (0.35 + w * 0.12) + Math.sin(x * 0.008 + t * (1.5 + w * 0.3) + w) * (30 + w * 10);
+            x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          }
+          ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+          ctx.fillStyle = `hsla(${30 + w * 15},90%,${55 + w * 5}%,${0.12 - w * 0.02})`;
+          ctx.fill();
+        }
+      } else if (scene === "aurora") {
+        for (let b = 0; b < 5; b++) {
+          ctx.beginPath();
+          for (let x = 0; x <= W; x += 3) {
+            const y = H * (0.25 + b * 0.1) + Math.sin(x * 0.005 + t * (0.8 + b * 0.2)) * (50 + b * 15) + Math.cos(x * 0.01 + t * 0.5) * 20;
+            x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          }
+          ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+          ctx.fillStyle = `hsla(${270 + b * 20},80%,60%,0.08)`;
+          ctx.fill();
+        }
+      } else if (scene === "circuit") {
+        ctx.strokeStyle = "rgba(96,165,250,0.15)"; ctx.lineWidth = 1;
+        for (let gx = 0; gx < W; gx += 40) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke(); }
+        for (let gy = 0; gy < H; gy += 40) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke(); }
+        for (const p of pts) {
+          p.x += p.vx;
+          if (Math.random() < 0.02) { const tmp = p.vx; p.vx = p.vy; p.vy = tmp; }
+          if (p.x > W + 10 || p.x < -10 || p.y > H + 10 || p.y < -10) { p.x = Math.random() * W; p.y = Math.random() * H; }
+          ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(${p.hue},90%,65%,0.8)`; ctx.fill();
+          ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(${p.hue},90%,65%,0.15)`; ctx.fill();
+        }
+      } else if (scene === "rain") {
+        for (const p of pts) {
+          p.x += p.vx; p.y += p.vy;
+          if (p.y > H) { p.y = -5; p.x = Math.random() * W; }
+          ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + p.vx * 3, p.y - p.vy * 2);
+          ctx.strokeStyle = `rgba(180,230,255,${p.a})`; ctx.lineWidth = p.r; ctx.stroke();
+        }
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => cancelAnimationFrame(raf);
+  }, [scene]);
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ mixBlendMode: "screen" }} />;
+}
+
+function StoriesViewer({ startIndex, onClose }: { startIndex: number; onClose: () => void }) {
   const [idx, setIdx] = useState(startIndex);
   const [progress, setProgress] = useState(0);
   const story = STORIES[idx];
-
   useEffect(() => {
     setProgress(0);
     if (story.isReview) return;
     const start = Date.now();
     const t = setInterval(() => {
-      const p = Math.min(1, (Date.now() - start) / 5000);
+      const p = Math.min(1, (Date.now() - start) / 8000);
       setProgress(p);
-      if (p >= 1) {
-        clearInterval(t);
-        if (idx < STORIES.length - 1) {
-          setIdx(idx + 1);
-          STORIES[idx].seen = true;
-        } else {
-          STORIES[idx].seen = true;
-          onClose();
-        }
-      }
+      if (p >= 1) { clearInterval(t); if (idx < STORIES.length - 1) { setIdx(idx + 1); STORIES[idx].seen = true; } else { STORIES[idx].seen = true; onClose(); } }
     }, 50);
     return () => clearInterval(t);
   }, [idx, story.isReview, onClose]);
-
-  const goNext = () => {
-    STORIES[idx].seen = true;
-    idx < STORIES.length - 1 ? setIdx(idx + 1) : onClose();
-  };
-  
-  const goPrev = () => {
-    if (idx > 0) {
-      STORIES[idx].seen = true;
-      setIdx(idx - 1);
-    }
-  };
-
+  const goNext = () => { STORIES[idx].seen = true; idx < STORIES.length - 1 ? setIdx(idx + 1) : onClose(); };
+  const goPrev = () => { if (idx > 0) { STORIES[idx].seen = true; setIdx(idx - 1); } };
   return (
     <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
       <div className="relative w-full max-w-[440px] h-[100dvh] overflow-hidden">
-        {/* Background */}
-        <div className={`absolute inset-0 ${story.bg}`}>
-          {story.id === "swift" && (
-            <img
-              src={swiftImg}
-              alt=""
-              className="absolute bottom-24 left-1/2 -translate-x-1/2 w-[120%] max-w-none object-contain drop-shadow-2xl"
-            />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/80" />
+        <div className={`absolute inset-0 ${story.bg}`} />
+        <VideoScene key={story.id} scene={story.videoScene} />
+        {story.id === "swift" && <img src={swiftImg} alt="" className="absolute bottom-32 left-1/2 -translate-x-1/2 w-[120%] max-w-none object-contain drop-shadow-2xl z-[2]" />}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/10 to-black/80 z-[3]" />
+        {/* AI Video badge */}
+        <div className="absolute top-14 left-4 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+          <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+          <span className="text-[9px] uppercase tracking-wider font-bold text-white/80">AI Video</span>
         </div>
-
-        {/* Progress segments */}
+        {/* Progress */}
         <div className="absolute top-4 left-3 right-3 flex gap-1 z-10">
           {STORIES.map((_, i) => (
-            <div key={i} className="flex-1 h-[3px] rounded-full bg-white/40 backdrop-blur-sm overflow-hidden shadow-sm">
-              <div
-                className="h-full bg-white transition-[width] duration-75 ease-linear shadow-md"
-                style={{
-                  width: i < idx ? "100%" : i === idx ? `${progress * 100}%` : "0%",
-                }}
-              />
+            <div key={i} className="flex-1 h-[3px] rounded-full bg-white/30 overflow-hidden">
+              <div className="h-full bg-white transition-[width] duration-75 ease-linear" style={{ width: i < idx ? "100%" : i === idx ? `${progress * 100}%` : "0%" }} />
             </div>
           ))}
         </div>
-
         {/* Header */}
         <div className="absolute top-8 left-4 right-4 flex items-center justify-between z-10">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FFD700] to-[#DAA520] shadow-lg flex items-center justify-center backdrop-blur-md border border-white/30">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FFD700] to-[#DAA520] shadow-lg flex items-center justify-center border border-white/30">
               <span className="font-serif text-white text-[13px] font-bold">M</span>
             </div>
             <div className="text-white text-[12.5px] font-bold uppercase tracking-[0.05em]">{story.label}</div>
           </div>
-          <button
-            onClick={onClose}
-            className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all border border-white/30 shadow-lg"
-          >
+          <button onClick={onClose} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all border border-white/30">
             <X size={18} strokeWidth={2.5} />
           </button>
         </div>
-
-        {/* Animated Banner Content - Middle Section */}
-        <div className="absolute top-24 left-0 right-0 bottom-32 flex items-center justify-center z-5 px-6 pointer-events-none">
-          <div className="w-full max-w-[360px]">
-            {/* Animated Icon Background */}
-            <div className="relative h-48 flex items-center justify-center mb-6">
-              {/* Pulsing circle background */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="absolute w-32 h-32 rounded-full bg-white/10 backdrop-blur-sm animate-pulse" />
-                <div className="absolute w-40 h-40 rounded-full border border-white/20 animate-[spin_8s_linear_infinite]" />
-                <div className="absolute w-48 h-48 rounded-full border border-white/10 animate-[spin_12s_linear_reverse_infinite]" />
-              </div>
-              
-              {/* Center Icon - Animated */}
-              <div className="relative z-10 animate-bounce">
-                <div className="text-6xl drop-shadow-2xl">
-                  {story.id === "offer" && "🔥"}
-                  {story.id === "swift" && "🚗"}
-                  {story.id === "emi" && "💰"}
-                  {story.id === "insurance" && "🛡️"}
-                  {story.id === "accessories" && "📸"}
-                  {story.id === "benefits" && "👑"}
-                  {story.id === "tv" && "🏅"}
-                  {story.id === "monsoon" && "🌧️"}
-                  {story.id === "ev" && "⚡"}
-                  {story.id === "review" && "⭐"}
-                </div>
-              </div>
-            </div>
-
-            {/* Animated Info Card */}
-            <div className="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/30 shadow-2xl animate-fade-in pointer-events-none">
-              <div className="text-center">
-                <p className="text-white/80 text-[12px] font-semibold uppercase tracking-[0.1em] mb-2">
-                  ✨ Tap to Explore
-                </p>
-                <div className="w-8 h-1 rounded-full bg-gradient-to-r from-transparent via-white/60 to-transparent mx-auto" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Tap zones */}
-        <button
-          onClick={goPrev}
-          className="absolute left-0 top-16 bottom-32 w-1/3 z-40 cursor-pointer"
-          aria-label="Previous"
-        />
-        <button
-          onClick={goNext}
-          className="absolute right-0 top-16 bottom-32 w-2/3 z-40 cursor-pointer"
-          aria-label="Next"
-        />
-
-        {/* Content / bottom CTA */}
-        {story.isReview ? (
-          <ReviewOverlay story={story} />
-        ) : (
+        <button onClick={goPrev} className="absolute left-0 top-16 bottom-32 w-1/3 z-40" aria-label="Previous" />
+        <button onClick={goNext} className="absolute right-0 top-16 bottom-32 w-2/3 z-40" aria-label="Next" />
+        {story.isReview ? <ReviewOverlay story={story} /> : (
           <div className="absolute inset-x-0 bottom-0 p-6 pb-8 z-10 pointer-events-none bg-gradient-to-t from-black/90 via-black/50 to-transparent">
-            <div className="font-serif text-white text-[28px] leading-tight font-bold tracking-tight">
-              {story.headline}
-            </div>
-            <div className="text-white/90 text-[14px] mt-2 max-w-[320px] font-medium leading-relaxed">
-              {story.sub}
-            </div>
-            <button className="mt-6 pointer-events-auto w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FFD700] via-[#C0C0C0] to-[#DAA520] text-[#1a1a1a] font-bold text-[14.5px] flex items-center justify-center gap-1.5 shadow-2xl hover:shadow-lg transition-all active:scale-95">
+            <div className="font-serif text-white text-[28px] leading-tight font-bold tracking-tight">{story.headline}</div>
+            <div className="text-white/90 text-[14px] mt-2 max-w-[320px] font-medium leading-relaxed">{story.sub}</div>
+            <button className="mt-6 pointer-events-auto w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FFD700] via-[#C0C0C0] to-[#DAA520] text-[#1a1a1a] font-bold text-[14.5px] flex items-center justify-center gap-1.5 shadow-2xl active:scale-95">
               {story.cta} <ChevronRight size={16} strokeWidth={3} />
             </button>
           </div>
