@@ -10,7 +10,7 @@ import {
   Paintbrush, Settings, ClipboardList, CarFront, FileCheck, CreditCard,
   RefreshCw, Banknote, Package, Disc3, SunMedium, Gauge,
   LifeBuoy, BookMarked, Navigation, ChevronLeft, LayoutGrid,
-  Newspaper, Radio, TrendingUp, Megaphone, Building2, Rocket, Globe, Heart,
+  Newspaper, TrendingUp, Megaphone, Building2, Rocket, Globe, Heart,
   PhoneCall,
 } from "lucide-react";
 import swiftImg from "@/assets/swift.png";
@@ -1405,12 +1405,19 @@ function NewsCardViewer({ onClose }: { onClose: () => void }) {
 type Story = {
   id: string;
   label: string;
+  category: string;
+  coverGradient: string;
+  coverAccent: string;
+  coverEmoji: string;
+  coverArt?: React.ReactNode;
+  teaser: string;
   bg: string;
   visual: React.ReactNode;
   cta: string;
   headline: string;
   sub: string;
   seen?: boolean;
+  isNew?: boolean;
   isReview?: boolean;
   videoScene: "particles" | "waves" | "aurora" | "circuit" | "rain";
 };
@@ -1419,6 +1426,12 @@ const STORIES: Story[] = [
   {
     id: "swift",
     label: "New Swift",
+    category: "LAUNCH",
+    coverGradient: "linear-gradient(150deg, #0D1B40 0%, #1E3A8A 55%, #3B82F6 100%)",
+    coverAccent: "#60A5FA",
+    coverEmoji: "🚗",
+    coverArt: <img src={swiftImg} alt="" className="w-[85%] object-contain drop-shadow-2xl" />,
+    teaser: "35 km/l hybrid",
     bg: "bg-gradient-to-br from-[#0D1B40] via-[#1E3A8A] to-[#3B82F6]",
     visual: (
       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0D1B40] via-[#1E3A8A] to-[#3B82F6] p-2">
@@ -1428,11 +1441,17 @@ const STORIES: Story[] = [
     cta: "Explore Now",
     headline: "The All-New Swift",
     sub: "Reimagined for 2026 · 35 km/l hybrid · 6 airbags standard",
+    isNew: true,
     videoScene: "particles",
   },
   {
     id: "ev",
     label: "e-Vitara",
+    category: "EV",
+    coverGradient: "linear-gradient(150deg, #050A18 0%, #0F1F4A 55%, #1a3a6b 100%)",
+    coverAccent: "#60A5FA",
+    coverEmoji: "⚡",
+    teaser: "500 km range",
     bg: "bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#0f3460]",
     visual: (
       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#0f3460]">
@@ -1442,11 +1461,17 @@ const STORIES: Story[] = [
     cta: "Pre-Reserve",
     headline: "e-Vitara Revolution",
     sub: "500 km range · Ultra-fast charging · Born electric",
+    isNew: true,
     videoScene: "circuit",
   },
   {
     id: "monsoon",
     label: "Monsoon Care",
+    category: "TIPS",
+    coverGradient: "linear-gradient(150deg, #042F24 0%, #065F46 55%, #0F766E 100%)",
+    coverAccent: "#34D399",
+    coverEmoji: "🌧️",
+    teaser: "Free 20-pt check",
     bg: "bg-gradient-to-br from-[#064E3B] via-[#0F766E] to-[#2DD4BF]",
     visual: (
       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#064E3B] via-[#0F766E] to-[#2DD4BF]">
@@ -1460,7 +1485,12 @@ const STORIES: Story[] = [
   },
   {
     id: "offer",
-    label: "Mega Offer",
+    label: "Festival Offer",
+    category: "OFFER",
+    coverGradient: "linear-gradient(150deg, #431407 0%, #92400E 55%, #D97706 100%)",
+    coverAccent: "#FCD34D",
+    coverEmoji: "🎁",
+    teaser: "Up to ₹75,000 off",
     bg: "bg-gradient-to-br from-[#78350F] via-[#B45309] to-[#F59E0B]",
     visual: (
       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#78350F] via-[#B45309] to-[#F59E0B]">
@@ -1470,11 +1500,36 @@ const STORIES: Story[] = [
     cta: "Grab Now",
     headline: "Summer Mega Sale",
     sub: "Up to ₹75,000 off · Exchange bonus · Free accessories",
+    isNew: true,
     videoScene: "waves",
   },
   {
+    id: "ev-charging",
+    label: "EV Charging",
+    category: "INSIGHTS",
+    coverGradient: "linear-gradient(150deg, #0C1A2E 0%, #1E3A5F 55%, #2563EB 100%)",
+    coverAccent: "#38BDF8",
+    coverEmoji: "🔋",
+    teaser: "Charging guide",
+    bg: "bg-gradient-to-br from-[#0C1A2E] via-[#1E3A5F] to-[#2563EB]",
+    visual: (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0C1A2E] via-[#1E3A5F] to-[#2563EB]">
+        <Zap size={32} className="text-[#38BDF8] drop-shadow-lg" />
+      </div>
+    ),
+    cta: "Learn More",
+    headline: "EV Charging Insights",
+    sub: "Find nearby chargers, charging tips & cost savings for EV owners",
+    videoScene: "circuit",
+  },
+  {
     id: "review",
-    label: "Rate Us",
+    label: "Rate Service",
+    category: "REVIEW",
+    coverGradient: "linear-gradient(150deg, #2D1057 0%, #5B21B6 55%, #7C3AED 100%)",
+    coverAccent: "#C4B5FD",
+    coverEmoji: "⭐",
+    teaser: "Share feedback",
     bg: "bg-gradient-to-br from-[#4C1D95] via-[#7C3AED] to-[#A78BFA]",
     visual: (
       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#4C1D95] via-[#7C3AED] to-[#A78BFA]">
@@ -1489,35 +1544,121 @@ const STORIES: Story[] = [
   },
 ];
 
-function StoryBubble({ story, onTap }: { story: Story; onTap: () => void }) {
+function StoryCard({ story, onTap }: { story: Story; onTap: () => void }) {
+  const newCount = STORIES.filter(s => s.isNew && !s.seen).length;
+  void newCount;
   return (
     <button
       onClick={onTap}
-      className="flex flex-col items-center gap-2 shrink-0 w-[80px] focus:outline-none group"
+      className="flex flex-col items-center gap-2 shrink-0 w-[88px] focus:outline-none active:scale-95 transition-transform duration-150 group"
+      style={{ WebkitTapHighlightColor: "transparent" }}
     >
+      {/* Ring + Card */}
       <div className="relative">
+        {/* Outer ring */}
         <div
-          className={`w-[76px] h-[76px] rounded-full p-[3px] transition-all duration-300 ${story.seen
-            ? "bg-gradient-to-br from-[#D3D3D3] to-[#A9A9A9]"
-            : "bg-gradient-to-br from-[#FFD700] via-[#C0C0C0] to-[#DAA520] shadow-lg"
-            }`}
+          className="rounded-[22px] p-[2.5px] transition-all duration-300"
+          style={{
+            background: story.seen
+              ? "linear-gradient(135deg, #B0B0B0 0%, #D8D8D8 50%, #9E9E9E 100%)"
+              : "linear-gradient(135deg, #C8A84B 0%, #F5E27A 30%, #E8C84A 55%, #A07830 80%, #C8A84B 100%)",
+            boxShadow: story.seen
+              ? "none"
+              : "0 0 0 1px rgba(200,168,75,0.3), 0 4px 16px rgba(200,168,75,0.25)",
+          }}
         >
-          <div className={`w-full h-full rounded-full bg-white p-[2.5px] transition-all ${story.seen ? "shadow-sm" : "shadow-md"
-            }`}>
+          {/* White gap ring */}
+          <div className="rounded-[20px] p-[2px] bg-white">
+            {/* Mini magazine cover card */}
             <div
-              className={`w-full h-full rounded-full overflow-hidden transition-all duration-300 ${story.seen ? "opacity-60 saturate-40 blur-[0.5px]" : "opacity-100 saturate-100"
-                }`}
+              className="relative w-[76px] h-[96px] rounded-[18px] overflow-hidden"
+              style={{ background: story.coverGradient }}
             >
-              {story.visual}
+              {/* Subtle noise texture overlay */}
+              <div
+                className="absolute inset-0 opacity-[0.04] rounded-[18px]"
+                style={{
+                  backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+                  backgroundSize: "100px 100px",
+                }}
+              />
+
+              {/* Category badge */}
+              <div
+                className="absolute top-1.5 left-1.5 right-1.5 flex items-center"
+              >
+                <span
+                  className="text-[6.5px] font-black uppercase tracking-[0.14em] px-1.5 py-[2px] rounded-full leading-none"
+                  style={{
+                    background: "rgba(255,255,255,0.18)",
+                    color: story.coverAccent,
+                    backdropFilter: "blur(4px)",
+                    border: `0.5px solid ${story.coverAccent}40`,
+                  }}
+                >
+                  {story.category}
+                </span>
+              </div>
+
+              {/* Art / emoji area */}
+              <div className="absolute inset-0 flex items-center justify-center" style={{ top: "20px", bottom: "28px" }}>
+                {story.coverArt ? (
+                  <div className="w-full h-full flex items-center justify-center px-1">
+                    {story.coverArt}
+                  </div>
+                ) : (
+                  <span
+                    className="text-[30px] leading-none drop-shadow-lg"
+                    style={{ filter: `drop-shadow(0 2px 8px ${story.coverAccent}60)` }}
+                  >
+                    {story.coverEmoji}
+                  </span>
+                )}
+              </div>
+
+              {/* Bottom overlay with teaser text */}
+              <div
+                className="absolute bottom-0 left-0 right-0 px-1.5 py-1.5"
+                style={{
+                  background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)",
+                }}
+              >
+                <div
+                  className="text-[7px] font-bold leading-tight text-white/90 truncate"
+                  style={{ letterSpacing: "0.02em" }}
+                >
+                  {story.teaser}
+                </div>
+              </div>
+
+              {/* Viewed overlay */}
+              {story.seen && (
+                <div className="absolute inset-0 bg-white/30 rounded-[18px]" style={{ backdropFilter: "saturate(0.3) brightness(0.85)" }} />
+              )}
             </div>
           </div>
         </div>
-        {!story.seen && (
-          <span className="absolute top-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-[#FFD700] ring-2 ring-white shadow-md animate-pulse" />
+
+        {/* NEW indicator — integrated into top-right of ring */}
+        {story.isNew && !story.seen && (
+          <div
+            className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full flex items-center justify-center px-1"
+            style={{
+              background: "linear-gradient(135deg, #FF6B35 0%, #E53E3E 100%)",
+              boxShadow: "0 0 0 2px white, 0 2px 6px rgba(229,62,62,0.5)",
+            }}
+          >
+            <span className="text-[7px] font-black text-white uppercase tracking-[0.05em]">NEW</span>
+          </div>
         )}
       </div>
-      <div className={`text-[10px] leading-tight text-center font-semibold transition-all duration-300 line-clamp-2 px-0.5 ${story.seen ? "text-[#999999]" : "text-[#1a1a1a]"
-        }`}>
+
+      {/* Label */}
+      <div
+        className={`text-[10px] leading-tight text-center font-semibold transition-all duration-300 line-clamp-2 px-0.5 w-full ${
+          story.seen ? "text-[#9CA3AF]" : "text-[#1a1a1a]"
+        }`}
+      >
         {story.label}
       </div>
     </button>
@@ -1525,17 +1666,41 @@ function StoryBubble({ story, onTap }: { story: Story; onTap: () => void }) {
 }
 
 function StoriesHeader() {
+  const newCount = STORIES.filter(s => s.isNew && !s.seen).length;
   const text = "Maruti Digest";
   return (
-    <div className="px-5 pt-4 pb-1 flex items-center justify-between">
-      <div>
-        <div className="flex items-center gap-1.5 mb-0.5">
+    <div className="px-5 pt-5 pb-2">
+      {/* Top row: eyebrow + count chip */}
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
           </span>
           <span className="text-[10px] uppercase tracking-[0.15em] font-bold text-accent">Exclusive Digest</span>
         </div>
+
+        {/* Elegant story count chip */}
+        {newCount > 0 && (
+          <div
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-bold"
+            style={{
+              background: "linear-gradient(135deg, rgba(200,168,75,0.12) 0%, rgba(245,226,122,0.08) 100%)",
+              border: "1px solid rgba(200,168,75,0.3)",
+              color: "#92731A",
+            }}
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ background: "linear-gradient(135deg, #C8A84B, #F5E27A)" }}
+            />
+            {newCount} New {newCount === 1 ? "Story" : "Stories"}
+          </div>
+        )}
+      </div>
+
+      {/* Title row */}
+      <div className="flex items-end justify-between">
         <h2 className="font-serif text-[22px] font-bold tracking-tight flex overflow-hidden">
           {text.split("").map((char, i) => (
             <span
@@ -1543,29 +1708,43 @@ function StoriesHeader() {
               className="inline-block maruti-digest-text animate-reveal-text"
               style={{
                 animationDelay: `${i * 0.06}s`,
-                whiteSpace: char === " " ? "pre" : "normal"
+                whiteSpace: char === " " ? "pre" : "normal",
               }}
             >
               {char}
             </span>
           ))}
         </h2>
+        <button className="text-[11px] font-semibold text-accent flex items-center gap-0.5 mb-0.5">
+          See all <ChevronRight size={12} />
+        </button>
       </div>
-      <div className="flex items-center gap-1.5 text-[11px] font-semibold text-muted-foreground/80 bg-secondary/80 px-2.5 py-1 rounded-full backdrop-blur-sm border border-[rgba(0,0,0,0.03)]">
-        <Radio size={12} className="text-accent animate-pulse" />
-        <span>5 Active</span>
-      </div>
+
+      {/* Thin separator line */}
+      <div
+        className="mt-3 h-px"
+        style={{
+          background: "linear-gradient(to right, rgba(200,168,75,0.4) 0%, rgba(200,168,75,0.1) 60%, transparent 100%)",
+        }}
+      />
     </div>
   );
 }
 
 function StoriesRail({ onOpen }: { onOpen: (i: number) => void }) {
   return (
-    <div className="bg-gradient-to-b from-white via-white to-[#f8f8f8] border-b border-[rgba(0,0,0,0.06)] shadow-sm">
+    <div
+      className="border-b shadow-sm"
+      style={{
+        background: "linear-gradient(180deg, #FEFEFE 0%, #F9F8F5 60%, #F5F3EE 100%)",
+        borderColor: "rgba(200,168,75,0.15)",
+        boxShadow: "0 2px 16px rgba(0,0,0,0.04), 0 1px 0 rgba(200,168,75,0.12)",
+      }}
+    >
       <StoriesHeader />
-      <div className="flex gap-3.5 overflow-x-auto no-scrollbar px-5 pb-4 pt-2">
+      <div className="flex gap-4 overflow-x-auto no-scrollbar px-5 pb-5 pt-3">
         {STORIES.map((s, i) => (
-          <StoryBubble key={s.id} story={s} onTap={() => onOpen(i)} />
+          <StoryCard key={s.id} story={s} onTap={() => onOpen(i)} />
         ))}
       </div>
     </div>
