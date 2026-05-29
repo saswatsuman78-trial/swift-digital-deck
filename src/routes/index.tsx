@@ -11,6 +11,7 @@ import {
   RefreshCw, Banknote, Package, Disc3, SunMedium, Gauge,
   LifeBuoy, BookMarked, Navigation, ChevronLeft, LayoutGrid,
   Newspaper, Radio, TrendingUp, Megaphone, Building2, Rocket, Globe, Heart,
+  PhoneCall,
 } from "lucide-react";
 import swiftImg from "@/assets/swift.png";
 import vitaraImg from "@/assets/grand-vitara.png";
@@ -107,11 +108,10 @@ function TopNav() {
       <div className="flex items-center justify-between px-5 pt-4 pb-3">
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
-            <span className="font-serif text-white text-[18px] leading-none">S</span>
+            <span className="font-serif text-white text-[18px] leading-none">R</span>
           </div>
           <div className="leading-tight">
             <div className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground font-semibold">Maruti Suzuki</div>
-            <div className="text-[13px] font-semibold text-foreground -mt-0.5">Rewards Member</div>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -145,7 +145,7 @@ function ServiceAlert({ onDismiss }: { onDismiss: () => void }) {
     <div className="mx-5 mt-3 flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#FEF3C7] text-[#92400E]">
       <AlertTriangle size={15} />
       <span className="text-[12.5px] font-medium flex-1">
-        Service due in 340 km — Book now
+        Service due in 15 days — Book now
       </span>
       <ChevronRight size={14} />
       <button onClick={onDismiss} aria-label="Dismiss" className="ml-1 opacity-70">
@@ -172,7 +172,7 @@ function HeroCarousel() {
     {
       eyebrow: "Service Due",
       title: "Book your next service",
-      sub: "Your Swift is due in 340 km. Lock in a slot this week.",
+      sub: "Your Swift is due in 15 days. Lock in a slot this week.",
       cta: "Book Now",
       gradient: "linear-gradient(135deg, #0D1B40 0%, #1F3A8A 60%, #1F6FEB 100%)",
       accentBg: "#1F6FEB",
@@ -265,7 +265,7 @@ function HeroCarousel() {
               {s.illustration}
               {i === 0 && (
                 <div className="absolute top-5 right-5 px-2 py-1 rounded-full bg-white/15 backdrop-blur text-[10px] font-semibold">
-                  340 km left
+                  15 days left
                 </div>
               )}
             </div>
@@ -515,7 +515,7 @@ function MyCarCard() {
               <div className="text-[14px] font-bold text-foreground mt-1">Jun '25</div>
             </div>
             <div className="rounded-xl bg-[#EDFAF4] px-3 py-3 text-center">
-              <div className="text-[9px] uppercase tracking-wider text-[#12A150] font-bold">Insurance</div>
+              <div className="text-[9px] uppercase tracking-wider text-[#12A150] font-bold">Insurance due</div>
               <div className="text-[14px] font-bold text-foreground mt-1">45 days</div>
             </div>
           </div>
@@ -525,7 +525,7 @@ function MyCarCard() {
             {[
               { icon: <ClipboardList size={13} />, label: "Service History" },
               { icon: <FileCheck size={13} />, label: "Download RC" },
-              { icon: <Share2 size={13} />, label: "Share Car" },
+              { icon: <PhoneCall size={13} />, label: "Call for Insurance" },
             ].map((chip) => (
               <button
                 key={chip.label}
@@ -1388,10 +1388,10 @@ function NewsCardViewer({ onClose }: { onClose: () => void }) {
           <div
             key={item.id}
             className={`h-1 rounded-full transition-all duration-300 ${i < NEWS_ITEMS.length - cards.length
-                ? "w-4 bg-white/60"
-                : i === NEWS_ITEMS.length - cards.length
-                  ? "w-6 bg-white"
-                  : "w-2 bg-white/20"
+              ? "w-4 bg-white/60"
+              : i === NEWS_ITEMS.length - cards.length
+                ? "w-6 bg-white"
+                : "w-2 bg-white/20"
               }`}
           />
         ))}
@@ -1498,8 +1498,8 @@ function StoryBubble({ story, onTap }: { story: Story; onTap: () => void }) {
       <div className="relative">
         <div
           className={`w-[76px] h-[76px] rounded-full p-[3px] transition-all duration-300 ${story.seen
-              ? "bg-gradient-to-br from-[#D3D3D3] to-[#A9A9A9]"
-              : "bg-gradient-to-br from-[#FFD700] via-[#C0C0C0] to-[#DAA520] shadow-lg"
+            ? "bg-gradient-to-br from-[#D3D3D3] to-[#A9A9A9]"
+            : "bg-gradient-to-br from-[#FFD700] via-[#C0C0C0] to-[#DAA520] shadow-lg"
             }`}
         >
           <div className={`w-full h-full rounded-full bg-white p-[2.5px] transition-all ${story.seen ? "shadow-sm" : "shadow-md"
@@ -1524,10 +1524,46 @@ function StoryBubble({ story, onTap }: { story: Story; onTap: () => void }) {
   );
 }
 
+function StoriesHeader() {
+  const text = "Maruti Digest";
+  return (
+    <div className="px-5 pt-4 pb-1 flex items-center justify-between">
+      <div>
+        <div className="flex items-center gap-1.5 mb-0.5">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+          </span>
+          <span className="text-[10px] uppercase tracking-[0.15em] font-bold text-accent">Exclusive Digest</span>
+        </div>
+        <h2 className="font-serif text-[22px] font-bold tracking-tight flex overflow-hidden">
+          {text.split("").map((char, i) => (
+            <span
+              key={i}
+              className="inline-block maruti-digest-text animate-reveal-text"
+              style={{
+                animationDelay: `${i * 0.06}s`,
+                whiteSpace: char === " " ? "pre" : "normal"
+              }}
+            >
+              {char}
+            </span>
+          ))}
+        </h2>
+      </div>
+      <div className="flex items-center gap-1.5 text-[11px] font-semibold text-muted-foreground/80 bg-secondary/80 px-2.5 py-1 rounded-full backdrop-blur-sm border border-[rgba(0,0,0,0.03)]">
+        <Radio size={12} className="text-accent animate-pulse" />
+        <span>5 Active</span>
+      </div>
+    </div>
+  );
+}
+
 function StoriesRail({ onOpen }: { onOpen: (i: number) => void }) {
   return (
     <div className="bg-gradient-to-b from-white via-white to-[#f8f8f8] border-b border-[rgba(0,0,0,0.06)] shadow-sm">
-      <div className="flex gap-3.5 overflow-x-auto no-scrollbar px-5 py-4">
+      <StoriesHeader />
+      <div className="flex gap-3.5 overflow-x-auto no-scrollbar px-5 pb-4 pt-2">
         {STORIES.map((s, i) => (
           <StoryBubble key={s.id} story={s} onTap={() => onOpen(i)} />
         ))}
@@ -1782,8 +1818,8 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
           <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
             <div
               className={`max-w-[260px] px-4 py-2 rounded-xl ${msg.sender === "user"
-                  ? "bg-gradient-to-r from-[#FFD700] to-[#DAA520] text-[#1a1a1a] font-medium"
-                  : "bg-white text-[#1a1a1a] border border-[#E5E7EB]"
+                ? "bg-gradient-to-r from-[#FFD700] to-[#DAA520] text-[#1a1a1a] font-medium"
+                : "bg-white text-[#1a1a1a] border border-[#E5E7EB]"
                 }`}
             >
               {msg.text}
@@ -1877,8 +1913,8 @@ function ChatbotBubble() {
           }
         }}
         className={`relative w-12 h-12 rounded-full shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center justify-center font-bold text-white text-lg group ${showOptions || showChat
-            ? "bg-gradient-to-br from-[#1E3A8A] to-[#475569]"
-            : "bg-gradient-to-br from-[#1E3A8A] via-[#60A5FA] to-[#C0C0C0] hover:scale-105"
+          ? "bg-gradient-to-br from-[#1E3A8A] to-[#475569]"
+          : "bg-gradient-to-br from-[#1E3A8A] via-[#60A5FA] to-[#C0C0C0] hover:scale-105"
           }`}
       >
         {showOptions || showChat ? (
