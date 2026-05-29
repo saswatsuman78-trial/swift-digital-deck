@@ -119,8 +119,15 @@ function TopNav() {
             <Bell size={18} className="text-foreground" />
             <span className="absolute top-2 right-2.5 w-1.5 h-1.5 rounded-full bg-[color:var(--amber)]" />
           </button>
-          <button className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
-            <User size={18} />
+          {/* Rewards Points */}
+          <button className="h-10 px-3 rounded-full bg-amber-50/80 border border-amber-200/50 hover:bg-amber-100/50 flex items-center gap-1.5 text-[#B45309] active:scale-95 transition-all">
+            <Trophy size={14} className="text-[#D97706]" fill="currentColor" />
+            <span className="text-[12px] font-bold">2,450 <span className="text-[10px] text-[#B45309]/80 font-semibold">Pts</span></span>
+          </button>
+          {/* SOS Button */}
+          <button className="h-10 px-3.5 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center gap-1 text-[12px] font-bold shadow-md shadow-red-600/20 active:scale-95 transition-all">
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <span>SOS</span>
           </button>
         </div>
       </div>
