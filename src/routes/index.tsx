@@ -1557,7 +1557,7 @@ function StoryCard({ story, onTap }: { story: Story; onTap: () => void }) {
   return (
     <button
       onClick={onTap}
-      className="flex flex-col items-center gap-2 shrink-0 w-[88px] focus:outline-none active:scale-95 transition-transform duration-150 group"
+      className="shrink-0 focus:outline-none active:scale-95 transition-transform duration-150 group"
       style={{ WebkitTapHighlightColor: "transparent" }}
     >
       {/* Ring + Card */}
@@ -1658,15 +1658,6 @@ function StoryCard({ story, onTap }: { story: Story; onTap: () => void }) {
             <span className="text-[7px] font-black text-white uppercase tracking-[0.05em]">NEW</span>
           </div>
         )}
-      </div>
-
-      {/* Label */}
-      <div
-        className={`text-[10px] leading-tight text-center font-semibold transition-all duration-300 line-clamp-2 px-0.5 w-full ${
-          story.seen ? "text-[#9CA3AF]" : "text-[#1a1a1a]"
-        }`}
-      >
-        {story.label}
       </div>
     </button>
   );
