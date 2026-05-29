@@ -1676,24 +1676,39 @@ function StoriesHeader() {
   const newCount = STORIES.filter(s => s.isNew && !s.seen).length;
   const text = "Maruti Digest";
   return (
-    <div className="px-5 pt-5 pb-2">
-      {/* Top row: eyebrow + count chip */}
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
-          </span>
-          <span className="text-[10px] uppercase tracking-[0.15em] font-bold text-accent">Exclusive Digest</span>
+    <div className="px-5 pt-4 pb-0">
+      <div className="flex items-end justify-between">
+        <div>
+          <div className="flex items-center gap-1.5 mb-0.5">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent"></span>
+            </span>
+            <span className="text-[9.5px] uppercase tracking-[0.14em] font-bold text-accent">Exclusive Digest</span>
+          </div>
+          <h2 className="font-serif text-[22px] font-bold tracking-tight flex overflow-hidden">
+            {text.split("").map((char, i) => (
+              <span
+                key={i}
+                className="inline-block maruti-digest-text animate-reveal-text"
+                style={{
+                  animationDelay: `${i * 0.06}s`,
+                  whiteSpace: char === " " ? "pre" : "normal",
+                }}
+              >
+                {char}
+              </span>
+            ))}
+          </h2>
         </div>
 
-        {/* Elegant story count chip */}
+        {/* Elegant story count chip occupying the space next to the title */}
         {newCount > 0 && (
           <div
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-bold"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-bold mb-0.5"
             style={{
               background: "linear-gradient(135deg, rgba(200,168,75,0.12) 0%, rgba(245,226,122,0.08) 100%)",
-              border: "1px solid rgba(200,168,75,0.3)",
+              border: "1px solid rgba(200,168,75,0.25)",
               color: "#92731A",
             }}
           >
@@ -1701,39 +1716,10 @@ function StoriesHeader() {
               className="w-1.5 h-1.5 rounded-full"
               style={{ background: "linear-gradient(135deg, #C8A84B, #F5E27A)" }}
             />
-            {newCount} New {newCount === 1 ? "Story" : "Stories"}
+            {newCount} New
           </div>
         )}
       </div>
-
-      {/* Title row */}
-      <div className="flex items-end justify-between">
-        <h2 className="font-serif text-[22px] font-bold tracking-tight flex overflow-hidden">
-          {text.split("").map((char, i) => (
-            <span
-              key={i}
-              className="inline-block maruti-digest-text animate-reveal-text"
-              style={{
-                animationDelay: `${i * 0.06}s`,
-                whiteSpace: char === " " ? "pre" : "normal",
-              }}
-            >
-              {char}
-            </span>
-          ))}
-        </h2>
-        <button className="text-[11px] font-semibold text-accent flex items-center gap-0.5 mb-0.5">
-          See all <ChevronRight size={12} />
-        </button>
-      </div>
-
-      {/* Thin separator line */}
-      <div
-        className="mt-3 h-px"
-        style={{
-          background: "linear-gradient(to right, rgba(200,168,75,0.4) 0%, rgba(200,168,75,0.1) 60%, transparent 100%)",
-        }}
-      />
     </div>
   );
 }
