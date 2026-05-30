@@ -1918,8 +1918,6 @@ function StoriesViewer({ startIndex, onClose }: { startIndex: number; onClose: (
   );
 }
 
-/* ---------- Chatbot Components ---------- */
-
 function ChatInterface({ onClose }: { onClose: () => void }) {
   const [messages, setMessages] = useState<{ id: string; text: string; sender: "user" | "bot" }[]>([
     { id: "1", text: "👋 Hello! Welcome to Maruti Suzuki. How can I help you today?", sender: "bot" },
@@ -2015,36 +2013,326 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
   );
 }
 
+function DealerChatInterface({ onClose }: { onClose: () => void }) {
+  const [messages, setMessages] = useState<{ id: string; text: string; sender: "user" | "dealer" }[]>([
+    { id: "1", text: "👋 Hello! I'm Amit Kumar from Rama Motors, your Maruti Suzuki Arena dealer. How can I assist you with your car purchase or service today?", sender: "dealer" },
+  ]);
+  const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [showCall, setShowCall] = useState(false);
+  const [callConnected, setCallConnected] = useState(false);
+  const [callSeconds, setCallSeconds] = useState(0);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isTyping]);
+
+  // Call timer and connection logic
+  useEffect(() => {
+    if (showCall) {
+      // Connect after 2.5 seconds of ringing
+      const connectTimeout = setTimeout(() => {
+        setCallConnected(true);
+        // Start counting seconds
+        timerRef.current = setInterval(() => {
+          setCallSeconds((prev) => prev + 1);
+        }, 1000);
+      }, 2500);
+
+      return () => {
+        clearTimeout(connectTimeout);
+        if (timerRef.current) clearInterval(timerRef.current);
+      };
+    } else {
+      setCallConnected(false);
+      setCallSeconds(0);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    }
+  }, [showCall]);
+
+  const formatCallTime = (totalSecs: number) => {
+    const mins = Math.floor(totalSecs / 60);
+    const secs = totalSecs % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const simulateDealerResponse = (userText: string) => {
+    setIsTyping(true);
+    setTimeout(() => {
+      setIsTyping(false);
+      let reply = "";
+      const text = userText.toLowerCase();
+
+      if (text.includes("test drive") || text.includes("book")) {
+        reply = "🚗 I would be delighted to arrange a test drive for you! We have the new Swift hybrid VXI and e-Vitara slots available this week. Would you prefer a home test drive or a visit to our Rama Motors showroom?";
+      } else if (text.includes("price") || text.includes("quote") || text.includes("cost") || text.includes("on-road")) {
+        reply = "📄 Absolutely! The Swift VXI on-road price starts at approximately ₹7.2 Lakhs (subject to location/taxes). I can share the detailed price breakout sheet with active discounts. Could you share your email or phone number?";
+      } else if (text.includes("stock") || text.includes("availability") || text.includes("available")) {
+        reply = "📦 Great news! We have immediate stock availability for the new Swift in Pearl Arctic White, Magma Grey, and Luster Blue. Other premium variants have a short 2-week waiting period. Which color are you looking for?";
+      } else if (text.includes("callback") || text.includes("call") || text.includes("phone")) {
+        reply = "📞 Understood. I've scheduled a callback with our senior sales consultant. They will reach out to you within the next 15 minutes at your registered number. Let me know if there's anything else I can help with!";
+      } else {
+        reply = "Thank you! I've noted your query regarding Maruti Suzuki vehicles. Let me check the latest inventory at Rama Motors. Would you like me to book a test drive or send a customized price quote?";
+      }
+
+      setMessages((prev) => [...prev, { id: Date.now().toString(), text: reply, sender: "dealer" }]);
+    }, 1500);
+  };
+
+  const handleSend = (textToSend?: string) => {
+    const text = textToSend || input;
+    if (!text.trim()) return;
+
+    const userMessage = { id: Date.now().toString(), text: text, sender: "user" as const };
+    setMessages((prev) => [...prev, userMessage]);
+    if (!textToSend) setInput("");
+
+    simulateDealerResponse(text);
+  };
+
+  const quickReplies = [
+    { text: "🚗 Book a Test Drive", label: "Book a Test Drive" },
+    { text: "📄 Request Price Quote", label: "Request Quote" },
+    { text: "📦 Check Stock Availability", label: "Check Stock" },
+    { text: "📞 Request Callback", label: "Request Callback" },
+  ];
+
+  return (
+    <div className="absolute bottom-16 right-0 w-[340px] h-[460px] bg-white rounded-2xl shadow-2xl flex flex-col z-50 border border-[#E5E7EB] animate-scale-in overflow-hidden">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-[#0D1B40] via-[#1E3A8A] to-[#2563EB] p-4 flex items-center justify-between shadow-md relative z-10 border-b border-white/10">
+        <div className="flex items-center gap-2.5">
+          <div className="relative">
+            <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center border border-white/20 text-white font-bold text-[14px]">
+              AK
+            </div>
+            <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-[#1E3A8A] animate-pulse" />
+          </div>
+          <div>
+            <div className="text-white font-bold text-[13px] tracking-wide">Amit Kumar</div>
+            <div className="text-blue-200 text-[10px] font-medium flex items-center gap-1">
+              <span className="w-1 h-1 rounded-full bg-blue-300 animate-ping" />
+              Rama Motors (Arena)
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => setShowCall(true)}
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all active:scale-90"
+            title="Call Dealer"
+          >
+            <Phone size={14} className="animate-[pulse_2s_infinite]" />
+          </button>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      </div>
+
+      {/* Message Screen */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9]">
+        {messages.map((msg) => (
+          <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+            <div className={`flex gap-2 max-w-[82%] ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"}`}>
+              {msg.sender === "dealer" && (
+                <div className="w-6 h-6 rounded-full bg-[#1E3A8A] text-white flex items-center justify-center font-bold text-[9px] shrink-0 self-end mb-1">
+                  AK
+                </div>
+              )}
+              <div
+                className={`px-3.5 py-2.5 rounded-2xl text-[13px] shadow-sm leading-relaxed ${
+                  msg.sender === "user"
+                    ? "bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-white font-medium rounded-tr-none"
+                    : "bg-white text-[#1E293B] border border-[#E2E8F0] rounded-tl-none"
+                }`}
+              >
+                {msg.text}
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {isTyping && (
+          <div className="flex justify-start">
+            <div className="flex gap-2 max-w-[80%] flex-row">
+              <div className="w-6 h-6 rounded-full bg-[#1E3A8A] text-white flex items-center justify-center font-bold text-[9px] shrink-0 self-end mb-1">
+                AK
+              </div>
+              <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-white text-[#1E293B] border border-[#E2E8F0] shadow-sm flex items-center">
+                <div className="flex gap-1 items-center">
+                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Quick Replies */}
+      <div className="px-3 pt-2 bg-gradient-to-t from-white to-[#F1F5F9] border-t border-slate-100">
+        <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-1">
+          {quickReplies.map((qr) => (
+            <button
+              key={qr.label}
+              onClick={() => handleSend(qr.text)}
+              className="shrink-0 px-3 py-1.5 rounded-full border border-blue-100 bg-blue-50/60 text-blue-700 hover:bg-blue-100 hover:border-blue-200 text-[11px] font-semibold transition-all active:scale-95 shadow-sm"
+            >
+              {qr.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Input area */}
+      <div className="p-3 bg-white border-t border-slate-100">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleSend()}
+            placeholder="Ask about test drives, quotes, stock..."
+            className="flex-1 px-4 py-2.5 rounded-full border border-slate-200 text-[12.5px] focus:outline-none focus:ring-2 focus:ring-blue-600 bg-[#F8FAFC]"
+          />
+          <button
+            onClick={() => handleSend()}
+            className="bg-blue-600 text-white p-2.5 rounded-full hover:bg-blue-700 shadow-md transition-all active:scale-90 flex items-center justify-center"
+          >
+            <Send size={15} />
+          </button>
+        </div>
+      </div>
+
+      {/* Simulated Phone Call Screen */}
+      {showCall && (
+        <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md z-50 flex flex-col items-center justify-between p-8 text-white animate-scale-in">
+          {/* Top details */}
+          <div className="text-center mt-6">
+            <span className="text-[10px] tracking-[0.2em] uppercase font-bold text-blue-400">In-App Dealer Connect</span>
+            <h3 className="text-2xl font-bold font-serif mt-2">Rama Motors</h3>
+            <p className="text-slate-400 text-[12px] mt-1">+91 98765 43210</p>
+          </div>
+
+          {/* Central Animation */}
+          <div className="relative flex items-center justify-center my-6">
+            {/* Pulsing ring */}
+            <div className="absolute w-24 h-24 rounded-full border-2 border-blue-500/30 animate-[ping_2s_infinite]" />
+            <div className="absolute w-36 h-36 rounded-full border border-blue-400/10 animate-[ping_3s_infinite]" />
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#1E3A8A] to-blue-600 flex items-center justify-center border-2 border-white/20 shadow-2xl z-10">
+              <Phone size={32} className={callConnected ? "" : "animate-[bounce_1s_infinite]"} />
+            </div>
+          </div>
+
+          {/* Call Status / Audio waveform simulation */}
+          <div className="text-center w-full px-4">
+            {callConnected ? (
+              <div className="space-y-4">
+                <div className="text-green-400 font-bold text-[14px] tracking-wide">Connected</div>
+                <div className="text-2xl font-mono font-semibold tracking-widest">{formatCallTime(callSeconds)}</div>
+                
+                {/* Audio Waveform Anim */}
+                <div className="flex gap-1.5 justify-center items-center h-8 mt-2">
+                  {[...Array(6)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-1.5 rounded-full bg-blue-400"
+                      style={{
+                        height: "100%",
+                        animation: "bounce 0.8s ease-in-out infinite alternate",
+                        animationDelay: `${i * 0.12}s`,
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="text-slate-400 font-medium text-[13px] animate-pulse">Ringing...</div>
+            )}
+          </div>
+
+          {/* Controls & End Call */}
+          <div className="w-full flex flex-col items-center gap-6 mb-4">
+            <div className="flex gap-6 justify-center text-slate-400 text-[11px]">
+              <div className="flex flex-col items-center gap-1.5 cursor-not-allowed opacity-55">
+                <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                </div>
+                <span>Mute</span>
+              </div>
+              <div className="flex flex-col items-center gap-1.5 cursor-not-allowed opacity-55">
+                <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                  <Headphones size={16} />
+                </div>
+                <span>Speaker</span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowCall(false)}
+              className="w-14 h-14 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center shadow-lg transition-all active:scale-90 relative"
+            >
+              <Phone size={24} className="rotate-[135deg]" />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ChatbotBubble() {
   const [showOptions, setShowOptions] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [showDealerChat, setShowDealerChat] = useState(false);
 
   return (
     <div className="absolute bottom-full right-4 mb-3 z-50">
-      {/* Chat Interface */}
+      {/* Chat Interface (AI Helper) */}
       {showChat && (
         <ChatInterface onClose={() => setShowChat(false)} />
       )}
 
+      {/* Dealer Chat Interface */}
+      {showDealerChat && (
+        <DealerChatInterface onClose={() => setShowDealerChat(false)} />
+      )}
+
       {/* Options Menu */}
-      {showOptions && !showChat && (
-        <div className="absolute bottom-16 right-0 bg-white rounded-2xl shadow-2xl border border-[#E5E7EB] overflow-hidden animate-scale-in">
-          {/* WhatsApp Option */}
-          <a
-            href="https://wa.me/919876543210?text=Hello%20Maruti%20Suzuki%2C%20I%20need%20assistance"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-green-50 hover:to-green-100 transition-all border-b border-[#E5E7EB] group cursor-pointer"
+      {showOptions && !showChat && !showDealerChat && (
+        <div className="absolute bottom-16 right-0 bg-white rounded-2xl shadow-2xl border border-[#E5E7EB] overflow-hidden animate-scale-in w-[250px]">
+          {/* Dealer Chat Option (Replaces WhatsApp) */}
+          <button
+            onClick={() => {
+              setShowOptions(false);
+              setShowDealerChat(true);
+            }}
+            className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 transition-all border-b border-[#E5E7EB] group cursor-pointer text-left"
           >
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white">
-              <Phone size={18} strokeWidth={2} />
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0D1B40] via-[#1E3A8A] to-[#2563EB] flex items-center justify-center text-white shadow-md">
+              <PhoneCall size={18} strokeWidth={2} />
             </div>
             <div className="flex-1">
-              <div className="font-bold text-[13px] text-[#1a1a1a] group-hover:text-green-700">Chat on WhatsApp</div>
-              <div className="text-[11px] text-[#666]">Direct messaging</div>
+              <div className="font-bold text-[13px] text-[#1a1a1a] group-hover:text-blue-700">Chat with Dealer</div>
+              <div className="text-[11px] text-[#666]">Rama Motors (Online)</div>
             </div>
-            <ExternalLink size={14} className="text-[#999] group-hover:text-green-600" />
-          </a>
+            <ChevronRight size={14} className="text-[#999] group-hover:text-blue-600 shrink-0" />
+          </button>
 
           {/* Chatbot Option */}
           <button
@@ -2052,16 +2340,16 @@ function ChatbotBubble() {
               setShowOptions(false);
               setShowChat(true);
             }}
-            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 transition-all group text-left"
+            className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gradient-to-r hover:from-amber-50 hover:to-amber-100 transition-all group cursor-pointer text-left"
           >
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFD700] to-[#DAA520] flex items-center justify-center text-white">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFD700] to-[#DAA520] flex items-center justify-center text-white shadow-md">
               <MessageCircle size={18} strokeWidth={2} />
             </div>
             <div className="flex-1">
               <div className="font-bold text-[13px] text-[#1a1a1a] group-hover:text-amber-700">Chat with AI</div>
               <div className="text-[11px] text-[#666]">Instant responses</div>
             </div>
-            <ChevronRight size={14} className="text-[#999] group-hover:text-amber-600" />
+            <ChevronRight size={14} className="text-[#999] group-hover:text-amber-600 shrink-0" />
           </button>
         </div>
       )}
@@ -2071,20 +2359,24 @@ function ChatbotBubble() {
         onClick={() => {
           if (showChat) {
             setShowChat(false);
+          } else if (showDealerChat) {
+            setShowDealerChat(false);
           } else {
             setShowOptions(!showOptions);
           }
         }}
-        className={`relative w-12 h-12 rounded-full shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center justify-center font-bold text-white text-lg group ${showOptions || showChat
-          ? "bg-gradient-to-br from-[#1E3A8A] to-[#475569]"
-          : "bg-gradient-to-br from-[#1E3A8A] via-[#60A5FA] to-[#C0C0C0] hover:scale-105"
-          }`}
+        className={`relative w-12 h-12 rounded-full shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center justify-center font-bold text-white text-lg group ${
+          showOptions || showChat || showDealerChat
+            ? "bg-gradient-to-br from-[#1E3A8A] to-[#475569]"
+            : "bg-gradient-to-br from-[#1E3A8A] via-[#60A5FA] to-[#C0C0C0] hover:scale-105"
+        }`}
       >
-        {showOptions || showChat ? (
+        {showOptions || showChat || showDealerChat ? (
           <X size={24} strokeWidth={3} />
         ) : (
           <MessageCircle size={24} strokeWidth={1.5} />
         )}
+
 
         {/* Animated Pulse Ring */}
         {!showOptions && !showChat && (
