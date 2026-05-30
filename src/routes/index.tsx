@@ -686,7 +686,7 @@ function ExploreCars() {
                 <span className="absolute inset-0 rounded-full opacity-0 group-hover/buy:opacity-100 transition-opacity duration-300" style={{
                   boxShadow: "inset 0 0 0 2px rgba(255,255,255,0.3)",
                 }} />
-                <ShoppingBag size={13} /> Buy Now
+                <ShoppingBag size={13} /> Book now
               </button>
             </div>
           </div>
@@ -2105,7 +2105,6 @@ function ChatbotBubble() {
 /* ---------- Page ---------- */
 
 function Home() {
-  const [alertOpen, setAlertOpen] = useState(true);
   const [storyIdx, setStoryIdx] = useState<number | null>(null);
   return (
     <div className="min-h-screen bg-[color:var(--surface)]">
@@ -2113,8 +2112,6 @@ function Home() {
         <TopNav />
         <NewsTicker />
         <StoriesRail onOpen={(i) => setStoryIdx(i)} />
-        {alertOpen && <ServiceAlert onDismiss={() => setAlertOpen(false)} />}
-        <HeroCarousel />
 
         {/* ── Section: Car Care ── */}
         <QuickActions />
