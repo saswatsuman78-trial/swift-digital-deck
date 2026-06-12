@@ -328,7 +328,7 @@ function HomepageShortCardGrid({
       {/* Explore Car Services */}
       <div
         onClick={onServiceClick}
-        className="min-w-0 rounded-tl-[24px] rounded-tr-[24px] rounded-br-[4px] rounded-bl-[24px] p-16 flex flex-col justify-between h-[165px] text-[#18171A] text-left relative overflow-hidden group cursor-pointer shadow-card border border-[rgba(0,0,0,0.04)] hover:shadow-md transition-shadow"
+        className="min-w-0 rounded-[20px] p-16 flex flex-col justify-between h-[165px] text-[#18171A] text-left relative overflow-hidden group cursor-pointer shadow-card border border-[rgba(0,0,0,0.04)] hover:shadow-md transition-shadow"
         style={{
           background: "linear-gradient(217deg, #CEE5E9 0%, #DAC8C6 100%)",
         }}
@@ -348,10 +348,9 @@ function HomepageShortCardGrid({
       {/* Book Your Car */}
       <div
         onClick={onBookClick}
-        className="min-w-0 p-16 flex flex-col justify-between h-[195px] text-white text-left relative overflow-hidden group cursor-pointer shadow-card hover:shadow-md transition-shadow"
+        className="min-w-0 rounded-[20px] p-16 flex flex-col justify-between h-[165px] text-white text-left relative overflow-hidden group cursor-pointer shadow-card hover:shadow-md transition-shadow"
         style={{
           backgroundColor: "#18171A",
-          clipPath: "polygon(0 16px, 16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%)",
         }}
       >
         {/* Subtle grid pattern */}
@@ -3740,7 +3739,8 @@ function Home() {
                 {/* divider */}
                 <div className="mx-24 my-16 h-px bg-[rgba(0,0,0,0.06)]" />
 
-                {/* ── Section: Pre-owned ── */}
+                {/* ── Section: Pre-owned & Quiz ── */}
+                <HelpMeDecide />
                 <HomepageShortCardGrid onServiceClick={() => setActiveTab("Service")} onBookClick={() => setActiveTab("Home")} />
                 <div className="mx-24 my-16 h-px bg-[rgba(0,0,0,0.06)]" />
                 <TrueValue />
