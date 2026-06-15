@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   Bell, User, ChevronRight, Wrench, Gift, ShieldCheck, Sparkles, BookOpen,
   Calculator, ArrowLeftRight, Headphones, Fuel, Zap, ParkingCircle, MapPin,
@@ -683,7 +684,7 @@ function CarCarePopup({ onClose }: { onClose: () => void }) {
     },
   ];
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={onClose}>
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
@@ -747,7 +748,8 @@ function CarCarePopup({ onClose }: { onClose: () => void }) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -2135,7 +2137,7 @@ function NewsCardViewer({ onClose }: { onClose: () => void }) {
     : null;
 
   if (cards.length === 0) {
-    return (
+    return createPortal(
       <div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-md flex items-center justify-center" onClick={onClose}>
         <div className="text-center animate-fade-in" onClick={(e) => e.stopPropagation()}>
           <div className="text-5xl mb-4">✅</div>
@@ -2148,11 +2150,12 @@ function NewsCardViewer({ onClose }: { onClose: () => void }) {
             Back to Home
           </button>
         </div>
-      </div>
+      </div>,
+      document.body
     );
   }
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-md flex flex-col" onClick={onClose}>
       {/* Header */}
       <div className="flex items-center justify-between px-24 pt-24 pb-8" onClick={(e) => e.stopPropagation()}>
@@ -2278,7 +2281,8 @@ function NewsCardViewer({ onClose }: { onClose: () => void }) {
           />
         ))}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -3071,9 +3075,9 @@ function DealerChatInterface({ onClose }: { onClose: () => void }) {
               </div>
               <div className="px-16 py-16 rounded-2xl rounded-tl-none bg-white text-[#1E293B] border border-[#E2E8F0] shadow-sm flex items-center">
                 <div className="flex gap-4 items-center">
-                  <div className="w-[6px] h-[6px] bg-[#19458B] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <div className="w-[6px] h-[6px] bg-[#19458B] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <div className="w-[6px] h-[6px] bg-[#19458B] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                  <div className="w-[6px] h-[6px] bg-[#19458B] rounded-full animate-bounce [animation-delay:0ms]" />
+                  <div className="w-[6px] h-[6px] bg-[#19458B] rounded-full animate-bounce [animation-delay:150ms]" />
+                  <div className="w-[6px] h-[6px] bg-[#19458B] rounded-full animate-bounce [animation-delay:300ms]" />
                 </div>
               </div>
             </div>
@@ -3147,17 +3151,12 @@ function DealerChatInterface({ onClose }: { onClose: () => void }) {
                 
                 {/* Audio Waveform Anim */}
                 <div className="flex gap-8 justify-center items-center h-[32px] mt-8">
-                  {[...Array(6)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-[6px] rounded-full bg-[#19458B]"
-                      style={{
-                        height: "100%",
-                        animation: "bounce 0.8s ease-in-out infinite alternate",
-                        animationDelay: `${i * 0.12}s`,
-                      }}
-                    />
-                  ))}
+                  <div className="w-[6px] h-full rounded-full bg-[#19458B] animate-[bounce_0.8s_ease-in-out_infinite_alternate] [animation-delay:0s]" />
+                  <div className="w-[6px] h-full rounded-full bg-[#19458B] animate-[bounce_0.8s_ease-in-out_infinite_alternate] [animation-delay:0.12s]" />
+                  <div className="w-[6px] h-full rounded-full bg-[#19458B] animate-[bounce_0.8s_ease-in-out_infinite_alternate] [animation-delay:0.24s]" />
+                  <div className="w-[6px] h-full rounded-full bg-[#19458B] animate-[bounce_0.8s_ease-in-out_infinite_alternate] [animation-delay:0.36s]" />
+                  <div className="w-[6px] h-full rounded-full bg-[#19458B] animate-[bounce_0.8s_ease-in-out_infinite_alternate] [animation-delay:0.48s]" />
+                  <div className="w-[6px] h-full rounded-full bg-[#19458B] animate-[bounce_0.8s_ease-in-out_infinite_alternate] [animation-delay:0.6s]" />
                 </div>
               </div>
             ) : (
